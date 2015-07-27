@@ -9,10 +9,11 @@
                  [org.postgresql/postgresql "9.4-1201-jdbc41"]
                  [compojure  "1.4.0"]
                  [ring  "1.4.0"]
-                 [liberator  "0.13"]
+                 [ring/ring-json "0.3.1"]
                  [com.taoensso/timbre  "4.0.2"]]
   :plugins  [[lein-ring  "0.9.6"]
              [lein-environ  "1.0.0"]]
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}}
+  :profiles {:uberjar {:aot :all}
+             :dev {:dependencies [[ring/ring-mock  "0.2.0"]]}}
   :ring  {:handler memoria.core/app})

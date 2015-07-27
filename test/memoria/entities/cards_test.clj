@@ -15,6 +15,10 @@
     (testing "When there is no card with the given id"
       (is (nil? (cards/find-by-id (+ 1 (:id card))))))))
 
+(deftest listing-all-cards
+  (dotimes [n 3] (cards/insert card-attributes))
+  (is (= (map #(:title %1) (cards/all)) ["A Card" "A Card" "A Card"])))
+
 (deftest cards-insertion
   (testing "Inserting a new card increases the total cards count"
     (let [initial-count (cards/cnt)]

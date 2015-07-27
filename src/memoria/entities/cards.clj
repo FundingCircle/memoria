@@ -12,8 +12,12 @@
 (defn find-by-id
   "Finds a card with the given id"
   [id]
-  (first (k/select cards
-                   (k/where {:id id}))))
+  (first (k/select cards (k/where {:id id}))))
+
+(defn all
+  "Returns all existent cards"
+  []
+  (k/select cards))
 
 (defn insert
   "Inserts a new card record in the database"
