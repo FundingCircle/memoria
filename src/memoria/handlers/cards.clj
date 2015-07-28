@@ -1,9 +1,10 @@
 (ns memoria.handlers.cards
   (:require [memoria.entities.cards :as cards]
             [memoria.handlers.basic :refer [not-found-response]]
+            [memoria.support.debugging :refer :all]
             [compojure.core :refer :all]
             [compojure.route :as route]
-            [ring.middleware.params :refer [wrap-params]]
+            [clojure.walk :refer [keywordize-keys]]
             [ring.middleware.json :refer [wrap-json-response]]))
 
 (defn index [req]
@@ -19,10 +20,17 @@
        :headers {"Content-Type" "application/json"}}
       (not-found-response (str "Could not find a card with id " id)))))
 
-(defn insert-card [req]
-  )
+(defn create [attrs]
+  (let [attrs attrs card (-> attrs keywordize-keys cards/insert)]
+    (if (:errors card)
+      {:status 400
+       :body card
+       :headers {"Content-Type" "application/json"}}
+      {:status 201
+       :body card
+       :headers {"Content-Type" "application/json"}})))
 
 (defroutes cards-routes
   (GET "/cards" req (index req))
   (GET "/cards/:id" [id :as req] (show id))
-  (POST "/cards" {params :params} (insert-card params)))
+  (POST "/cards" {body :body :as req} (create body)))

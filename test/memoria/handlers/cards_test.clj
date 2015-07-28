@@ -39,3 +39,30 @@
 
       (testing "Returns a not found message"
         (is (= (get-in response [:body :message]) "Could not find a card with id 123"))))))
+
+(deftest inserting-a-card
+  (with-redefs [cards/insert (fn [attrs] a-card)]
+    (let [attrs (select-keys a-card [:title :contents])
+          response (cards-handler/cards-routes (mock/request :post "/cards" attrs))]
+      (testing "Responds with 200"
+        (is (= (:status response) 201)))
+
+      (testing "Returns the created card"
+        (is (= (get-in response [:body :id]) 123)))
+
+      (testing "Has json as the content type"
+        (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
+
+(deftest inserting-a-card-with-invalid-attributes
+  (with-redefs [cards/insert (fn [attrs] (assoc a-card :errors {:title "Can't be blank."}))]
+    (let [attrs {}
+          response (cards-handler/cards-routes (mock/request :post "/cards" attrs))]
+      (testing "Responds with 400"
+        (is (= (:status response) 400)))
+
+      (testing "Returns the created card"
+        (is (= (get-in response [:body :id]) 123)))
+
+      (testing "Has json as the content type"
+        (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
+
