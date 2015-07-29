@@ -10,7 +10,8 @@
                  [compojure  "1.4.0"]
                  [ring  "1.4.0"]
                  [ring/ring-json "0.3.1"]
-                 [com.taoensso/timbre  "4.0.2"]]
+                 [com.taoensso/timbre  "4.0.2"]
+                 [bouncer "0.3.3"]]
   :plugins  [[lein-ring  "0.9.6"]
              [lein-environ  "1.0.0"]]
   :target-path "target/%s"

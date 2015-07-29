@@ -1,11 +1,20 @@
 (ns memoria.entities.cards-test
   (:require [memoria.entities.cards :as cards]
             [memoria.support.db-test-helpers :as db-helpers]
+            [memoria.support.debugging :refer :all]
             [clojure.test :refer :all]))
 
 (db-helpers/setup-db-test)
 
 (def card-attributes {:title "A Card" :contents "These are the card's contents"})
+
+(deftest validations
+  (let [card (cards/validate {})]
+    (testing "Validates title presence"
+      (is (= (get-in card [:errors :title]) '("title must be present"))))
+
+    (testing "Validates contents presence"
+      (is (= (get-in card [:errors :contents]) '("contents must be present"))))))
 
 (deftest finding-cards-by-id
   (let [card (cards/insert card-attributes)]
@@ -31,7 +40,12 @@
 
   (testing "The inserted card has the correct contents"
     (let [card (cards/insert card-attributes)]
-      (is (= (:contents card) "These are the card's contents")))))
+      (is (= (:contents card) "These are the card's contents"))))
+
+  (testing "Fails if the attributes are invalid"
+    (let [card (cards/insert {})]
+      (is (= (:id card) nil))
+      (is (some? (:errors card))))))
 
 (deftest update-cards
   (let [card (cards/insert card-attributes)]

@@ -1,7 +1,20 @@
 (ns memoria.entities.cards
-  (:require [korma.core :as k]))
+  (:require [korma.core :as k]
+            [bouncer.core :as b]
+            [bouncer.validators :as v]))
 
 (k/defentity cards)
+
+(defn validate [card]
+  (let [errors (first (b/validate card
+                                :title v/required
+                                :contents v/required))]
+    (if (some? errors)
+      (assoc card :errors errors)
+      card)))
+
+(defn valid? [card]
+  (nil? (:errors card)))
 
 (defn cnt
   "Returns the total number of card records in
@@ -22,7 +35,10 @@
 (defn insert
   "Inserts a new card record in the database"
   [{:keys [title contents]}]
-  (k/insert cards (k/values {:title title :contents contents})))
+  (let [attrs (validate {:title title :contents contents})]
+    (if (valid? attrs)
+      (k/insert cards (k/values attrs))
+      attrs)))
 
 (defn update-by-id
   "Updates the card having the given id with the new attributes"
@@ -35,3 +51,4 @@
   "Deletes the card having the given id"
   [id]
   (k/delete cards (k/where {:id id})))
+
