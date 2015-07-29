@@ -14,10 +14,7 @@
         (is (= (:status response) 200)))
 
       (testing "Returns the cards"
-        (is (= (:body response) [a-card])))
-
-      (testing "Has json as the content type"
-        (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
+        (is (= (:body response) [a-card]))))))
 
 (deftest getting-a-card
   (with-redefs [cards/find-by-id (constantly a-card)]
@@ -26,10 +23,7 @@
         (is (= (:status response) 200)))
 
       (testing "Returns the card"
-        (is (= (:body response) a-card)))
-
-      (testing "Has json as the content type"
-        (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
+        (is (= (:body response) a-card))))))
 
 (deftest getting-a-not-found-card
   (with-redefs [cards/find-by-id (constantly nil)]
@@ -48,10 +42,7 @@
         (is (= (:status response) 201)))
 
       (testing "Returns the created card"
-        (is (= (get-in response [:body :id]) 123)))
-
-      (testing "Has json as the content type"
-        (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
+        (is (= (get-in response [:body :id]) 123))))))
 
 (deftest inserting-a-card-with-invalid-attributes
   (with-redefs [cards/insert (constantly (assoc a-card :errors {:title "Can't be blank."}))]
@@ -61,8 +52,5 @@
         (is (= (:status response) 400)))
 
       (testing "Returns the created card"
-        (is (= (get-in response [:body :id]) 123)))
-
-      (testing "Has json as the content type"
-        (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
+        (is (= (get-in response [:body :id]) 123))))))
 

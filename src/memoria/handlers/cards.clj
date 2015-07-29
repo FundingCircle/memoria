@@ -16,19 +16,16 @@
   (let [card (cards/find-by-id (Integer. id))]
     (if (some? card)
       {:status 200
-       :body card
-       :headers {"Content-Type" "application/json"}}
+       :body card}
       (not-found-response (str "Could not find a card with id " id)))))
 
 (defn create [attrs]
   (let [attrs attrs card (-> attrs keywordize-keys cards/insert)]
     (if (:errors card)
       {:status 400
-       :body card
-       :headers {"Content-Type" "application/json"}}
+       :body card}
       {:status 201
-       :body card
-       :headers {"Content-Type" "application/json"}})))
+       :body card})))
 
 (defroutes cards-routes
   (GET "/cards" req (index req))
