@@ -8,7 +8,7 @@
 (def a-card {:id 123 :title "A Card" :contents "The contents"})
 
 (deftest listing-cards
-  (with-redefs [cards/all (fn [] [a-card])]
+  (with-redefs [cards/all (constantly [a-card])]
     (let [response (cards-handler/cards-routes (mock/request :get "/cards"))]
       (testing "Responds with 200"
         (is (= (:status response) 200)))
@@ -20,7 +20,7 @@
         (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
 
 (deftest getting-a-card
-  (with-redefs [cards/find-by-id (fn [id] a-card)]
+  (with-redefs [cards/find-by-id (constantly a-card)]
     (let [response (cards-handler/cards-routes (mock/request :get (str "/cards/" (:id a-card))))]
       (testing "Responds with 200"
         (is (= (:status response) 200)))
@@ -32,7 +32,7 @@
         (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
 
 (deftest getting-a-not-found-card
-  (with-redefs [cards/find-by-id (fn [id] nil)]
+  (with-redefs [cards/find-by-id (constantly nil)]
     (let [response (cards-handler/cards-routes (mock/request :get "/cards/123"))]
       (testing "Responds with 404"
         (is (= (:status response) 404)))
@@ -41,7 +41,7 @@
         (is (= (get-in response [:body :message]) "Could not find a card with id 123"))))))
 
 (deftest inserting-a-card
-  (with-redefs [cards/insert (fn [attrs] a-card)]
+  (with-redefs [cards/insert (constantly a-card)]
     (let [attrs (select-keys a-card [:title :contents])
           response (cards-handler/cards-routes (mock/request :post "/cards" attrs))]
       (testing "Responds with 200"
@@ -54,7 +54,7 @@
         (is (= (get-in response [:headers "Content-Type"]) "application/json"))))))
 
 (deftest inserting-a-card-with-invalid-attributes
-  (with-redefs [cards/insert (fn [attrs] (assoc a-card :errors {:title "Can't be blank."}))]
+  (with-redefs [cards/insert (constantly (assoc a-card :errors {:title "Can't be blank."}))]
     (let [attrs {}
           response (cards-handler/cards-routes (mock/request :post "/cards" attrs))]
       (testing "Responds with 400"
