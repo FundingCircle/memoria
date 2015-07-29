@@ -48,8 +48,8 @@
   (with-redefs [cards/insert (constantly (assoc a-card :errors {:title "Can't be blank."}))]
     (let [attrs {}
           response (cards-handler/cards-routes (mock/request :post "/cards" attrs))]
-      (testing "Responds with 400"
-        (is (= (:status response) 400)))
+      (testing "Responds with 422"
+        (is (= (:status response) 422)))
 
       (testing "Returns the created card"
         (is (= (get-in response [:body :id]) 123))))))

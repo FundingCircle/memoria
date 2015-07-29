@@ -22,7 +22,7 @@
 (defn create [attrs]
   (let [attrs attrs card (-> attrs keywordize-keys cards/insert)]
     (if (:errors card)
-      {:status 400
+      {:status 422
        :body card}
       {:status 201
        :body card})))
