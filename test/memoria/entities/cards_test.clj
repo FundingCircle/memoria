@@ -11,10 +11,12 @@
 (deftest validations
   (let [card (cards/validate {})]
     (testing "Validates title presence"
-      (is (= (get-in card [:errors :title]) '("title must be present"))))
+      (is (= (get-in card [:errors :title])
+             '("title must be present"))))
 
     (testing "Validates contents presence"
-      (is (= (get-in card [:errors :contents]) '("contents must be present"))))))
+      (is (= (get-in card [:errors :contents])
+             '("contents must be present"))))))
 
 (deftest finding-cards-by-id
   (let [card (cards/insert card-attributes)]
@@ -26,13 +28,15 @@
 
 (deftest listing-all-cards
   (dotimes [n 3] (cards/insert card-attributes))
-  (is (= (map #(:title %1) (cards/all)) ["A Card" "A Card" "A Card"])))
+  (is (= (map #(:title %1) (cards/all))
+         ["A Card" "A Card" "A Card"])))
 
 (deftest cards-insertion
   (testing "Inserting a new card increases the total cards count"
     (let [initial-count (cards/cnt)]
       (cards/insert card-attributes)
-      (is (= (cards/cnt) (+ 1 initial-count)))))
+      (is (= (cards/cnt)
+             (+ 1 initial-count)))))
 
   (testing "The inserted card has the correct title"
     (let [card (cards/insert card-attributes)]
@@ -40,7 +44,8 @@
 
   (testing "The inserted card has the correct contents"
     (let [card (cards/insert card-attributes)]
-      (is (= (:contents card) "These are the card's contents"))))
+      (is (= (:contents card)
+             "These are the card's contents"))))
 
   (testing "Fails if the attributes are invalid"
     (let [card (cards/insert {})]

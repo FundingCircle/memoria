@@ -32,7 +32,8 @@
         (is (= (:status response) 404)))
 
       (testing "Returns a not found message"
-        (is (= (get-in response [:body :message]) "Could not find a card with id 123"))))))
+        (is (= (get-in response [:body :message])
+               "Could not find a card with id 123"))))))
 
 (deftest inserting-a-card
   (with-redefs [cards/insert (constantly a-card)]
