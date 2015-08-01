@@ -55,3 +55,12 @@
       (testing "Returns the created card"
         (is (= (get-in response [:body :id]) 123))))))
 
+(deftest updating-a-card
+  (with-redefs [cards/update-by-id (constantly (assoc a-card :title "New title"))]
+    (let [attrs {:title "New title"}
+          response (cards-handler/cards-routes (mock/request :patch (str "/cards/" (:id a-card))))]
+      (testing "Responds with 200"
+        (is (= (:status response) 200)))
+
+      (testing "Returns the updated card"
+        (is (= (get-in response [:body :title]) "New title"))))))

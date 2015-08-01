@@ -42,10 +42,14 @@
 
 (defn update-by-id
   "Updates the card having the given id with the new attributes"
-  [id {:keys [title contents]}]
-  (k/update cards
-            (k/set-fields {:title title :contents contents})
-            (k/where {:id id})))
+  [id attrs]
+  (let [c (find-by-id id)
+         attrs (validate (merge c attrs))]
+    (when (valid? attrs)
+      (k/update cards
+                (k/set-fields attrs)
+                (k/where {:id id})))
+    attrs))
 
 (defn delete-by-id
   "Deletes the card having the given id"

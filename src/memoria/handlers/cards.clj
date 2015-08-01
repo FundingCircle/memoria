@@ -20,14 +20,26 @@
       (not-found-response (str "Could not find a card with id " id)))))
 
 (defn create [attrs]
-  (let [attrs attrs card (-> attrs keywordize-keys cards/insert)]
+  (let [attrs (keywordize-keys attrs)
+        card (cards/insert attrs)]
     (if (:errors card)
       {:status 422
        :body card}
       {:status 201
        :body card})))
 
+(defn update-card [id attrs]
+  (let [id (Integer. id)
+        attrs (keywordize-keys attrs)
+        card (cards/update-by-id id attrs)]
+    (if (:errors card)
+      {:status 422
+       :body card}
+      {:status 200
+       :body card})))
+
 (defroutes cards-routes
   (GET "/cards" req (index req))
   (GET "/cards/:id" [id :as req] (show id))
-  (POST "/cards" {body :body :as req} (create body)))
+  (POST "/cards" {body :body :as req} (create body))
+  (PATCH "/cards/:id" {body :body {id :id} :params} (update-card id body)))

@@ -1,7 +1,6 @@
 (ns memoria.entities.cards-test
   (:require [memoria.entities.cards :as cards]
             [memoria.support.db-test-helpers :as db-helpers]
-            [memoria.support.debugging :refer :all]
             [clojure.test :refer :all]))
 
 (db-helpers/setup-db-test)
@@ -53,12 +52,24 @@
       (is (some? (:errors card))))))
 
 (deftest update-cards
-  (let [card (cards/insert card-attributes)]
-    (testing "Updates the cards attributes"
-      (cards/update-by-id (:id card) {:title "New title" :contents "New contents"})
-      (let [updated-card (cards/find-by-id (:id card))]
-        (is (= (:title updated-card) "New title"))
-        (is (= (:contents updated-card) "New contents"))))))
+  (testing "Updates the database record for the card"
+    (let [card (cards/insert card-attributes)
+          updated-card (cards/update-by-id (:id card) {:title "New title" :contents "New contents"})
+          reloaded-card (cards/find-by-id (:id card))]
+      (is (= (:title reloaded-card) "New title"))
+      (is (= (:contents reloaded-card) "New contents"))))
+
+  (testing "Returns the updated card"
+    (let [card (cards/insert card-attributes)
+          updated-card (cards/update-by-id (:id card) {:title "New title" :contents "New contents"})]
+      (is (= (:title updated-card) "New title"))
+
+      (is (= (:contents updated-card) "New contents"))))
+
+  (testing "Fails if the attributes are invalid"
+    (let [card (cards/insert card-attributes)
+          updated-card (cards/update-by-id (:id card) {:title nil})]
+      (is (some? (:errors updated-card))))))
 
 (deftest delete-cards
   (let [card (cards/insert card-attributes)]
