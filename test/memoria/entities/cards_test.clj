@@ -3,7 +3,7 @@
             [memoria.support.db-test-helpers :as db-helpers]
             [clojure.test :refer :all]))
 
-(db-helpers/setup-db-test)
+(db-helpers/setup-db-test :transaction)
 
 (def card-attributes {:title "A Card" :contents "These are the card's contents"})
 
