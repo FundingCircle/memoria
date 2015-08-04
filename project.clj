@@ -11,6 +11,7 @@
                  [ring  "1.4.0"]
                  [ring/ring-json "0.3.1"]
                  [org.clojure/data.json "0.2.6"]
+                 [clj-http "2.0.0"]
                  [com.taoensso/timbre  "4.0.2"]
                  [slingshot "0.12.2"]
                  [bouncer "0.3.3"]]

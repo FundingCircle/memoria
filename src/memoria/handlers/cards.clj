@@ -38,8 +38,16 @@
       {:status 200
        :body card})))
 
+(defn delete-card [id]
+  (let [id (Integer. id)]
+    (cards/delete-by-id id)
+    {:status 200
+     :body {}}))
+
 (defroutes cards-routes
   (GET "/cards" req (index req))
   (GET "/cards/:id" [id :as req] (show id))
   (POST "/cards" {body :body :as req} (create body))
-  (PATCH "/cards/:id" {body :body {id :id} :params} (update-card id body)))
+  (PATCH "/cards/:id" {body :body {id :id} :params} (update-card id body))
+  (DELETE "/cards/:id" [id :as req] (delete-card id))
+  (route/not-found {:status 404 :body {}}))
