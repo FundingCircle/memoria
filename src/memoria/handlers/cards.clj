@@ -9,8 +9,7 @@
 
 (defn index [req]
   {:status 200
-   :body (cards/all)
-   :headers {"Content-Type" "application/json"}})
+   :body (cards/all)})
 
 (defn show [id]
   (let [card (cards/find-by-id (Integer. id))]

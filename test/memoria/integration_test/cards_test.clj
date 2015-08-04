@@ -13,7 +13,7 @@
       (let [response (do-get "/cards")
             {:keys [status body headers]} response]
         (is (= (count body) 2))
-        (is (= (headers "content-type") "application/json"))
+        (is (= (headers "content-type") "application/json; charset=utf-8"))
         (is (= status 200))
         (is (= (get (first body) "title") "A Card"))))))
 
