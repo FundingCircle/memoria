@@ -2,6 +2,7 @@
   (:require [memoria.entities.cards :as cards]
             [memoria.handlers.basic :refer [not-found-response]]
             [memoria.support.debugging :refer :all]
+            [memoria.db :as db]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [clojure.walk :refer [keywordize-keys]]
@@ -9,10 +10,10 @@
 
 (defn index [req]
   {:status 200
-   :body (cards/all)})
+   :body (cards/all db/*conn*)})
 
 (defn show [id]
-  (let [card (cards/find-by-id (Integer. id))]
+  (let [card (cards/find-by-id db/*conn* (Integer. id))]
     (if (some? card)
       {:status 200
        :body card}
@@ -20,7 +21,7 @@
 
 (defn create [attrs]
   (let [attrs (keywordize-keys attrs)
-        card (cards/insert attrs)]
+        card (cards/insert db/*conn* attrs)]
     (if (:errors card)
       {:status 422
        :body card}
@@ -30,7 +31,7 @@
 (defn update-card [id attrs]
   (let [id (Integer. id)
         attrs (keywordize-keys attrs)
-        card (cards/update-by-id id attrs)]
+        card (cards/update-by-id db/*conn* id attrs)]
     (if (:errors card)
       {:status 422
        :body card}
@@ -39,7 +40,7 @@
 
 (defn delete-card [id]
   (let [id (Integer. id)]
-    (cards/delete-by-id id)
+    (cards/delete-by-id db/*conn* id)
     {:status 200
      :body {}}))
 

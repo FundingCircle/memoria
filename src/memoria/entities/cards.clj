@@ -1,9 +1,9 @@
 (ns memoria.entities.cards
-  (:require [korma.core :as k]
+  (:require [yesql.core :refer [defqueries]]
             [bouncer.core :as b]
             [bouncer.validators :as v]))
 
-(k/defentity cards)
+(defqueries "sql/cards.sql")
 
 (defn validate [card]
   (let [errors (first (b/validate card
@@ -19,40 +19,38 @@
 (defn cnt
   "Returns the total number of card records in
   the database"
-  []
-  (:cnt (first (k/select cards (k/aggregate (count :*) :cnt)))))
+  [db]
+  (:count (first (count-cards {} {:connection db}))))
 
 (defn find-by-id
   "Finds a card with the given id"
-  [id]
-  (first (k/select cards (k/where {:id id}))))
+  [db id]
+  (first (find-card-by-id {:id id} {:connection db})))
 
 (defn all
   "Returns all existent cards"
-  []
-  (k/select cards))
+  [db]
+  (select-all-cards {} {:connection db}))
 
 (defn insert
   "Inserts a new card record in the database"
-  [{:keys [title contents]}]
+  [db {:keys [title contents]}]
   (let [attrs (validate {:title title :contents contents})]
     (if (valid? attrs)
-      (k/insert cards (k/values attrs))
+      (insert-card<! attrs {:connection db})
       attrs)))
 
 (defn update-by-id
   "Updates the card having the given id with the new attributes"
-  [id attrs]
-  (let [c (find-by-id id)
-         attrs (validate (merge c attrs))]
+  [db id attrs]
+  (let [c (find-by-id db id)
+        attrs (validate (merge c attrs))]
     (when (valid? attrs)
-      (k/update cards
-                (k/set-fields attrs)
-                (k/where {:id id})))
+      (update-card-by-id! (assoc attrs :id id) {:connection db}))
     attrs))
 
 (defn delete-by-id
   "Deletes the card having the given id"
-  [id]
-  (k/delete cards (k/where {:id id})))
+  [db id]
+  (delete-card-by-id! {:id id} {:connection db}))
 

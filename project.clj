@@ -4,8 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [korma "0.4.2"]
-                 [yesql "0.4.2"]
+                 [yesql "0.5.0-rc3"]
                  [hikari-cp "1.2.4"]
                  [ragtime "0.5.0"]
                  [org.postgresql/postgresql "9.4-1201-jdbc41"]

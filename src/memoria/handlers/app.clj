@@ -4,6 +4,7 @@
             [ring.middleware.params :refer  [wrap-params]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [taoensso.timbre :as timbre]
+            [memoria.db :as db]
             [memoria.handlers.cards :as cards-handler]))
 
 (defn wrap-request-logging [app]
@@ -13,6 +14,14 @@
       (timbre/info (str "Response: " response "\n"))
       response)))
 
+(defn wrap-db-conn [app]
+  (fn [request]
+    (let [datasource (if (= "test" (get-in request [:headers "memoria-mode"]))
+                       (db/test-datasource)
+                       (db/datasource))]
+      (binding [db/*conn* datasource]
+        (app request)))))
+
 (defroutes app-routes
   cards-handler/cards-routes)
 
@@ -21,5 +30,6 @@
       wrap-params
       wrap-json-body
       wrap-json-response
+      wrap-db-conn
       wrap-request-logging))
 

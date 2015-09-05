@@ -28,7 +28,7 @@
       {:body body :headers headers :status 422})))
 
 (defn- merge-headers [headers]
-  (assoc (or headers {}) "Content-Type" "application/json"))
+  (assoc (or headers {}) "Content-Type" "application/json" "memoria-mode" "test"))
 
 (defn do-get
   ([url] (do-get url {}))
