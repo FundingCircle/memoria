@@ -1,5 +1,5 @@
 (ns memoria.core
-            [memoria.config :as config]
+  (:require [memoria.config :as config]
             [memoria.handlers.app :as app-handlers]))
 
 
