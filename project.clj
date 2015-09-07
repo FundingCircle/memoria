@@ -17,7 +17,8 @@
                  [clj-http "2.0.0"]
                  [com.taoensso/timbre "4.0.2"]
                  [slingshot "0.12.2"]
-                 [bouncer "0.3.3"]]
+                 [bouncer "0.3.3"]
+                 [selmer "0.9.1"]]
 
   :plugins [[lein-ring "0.9.6"]
             [lein-environ "1.0.0"]

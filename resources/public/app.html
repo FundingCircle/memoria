@@ -2,9 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>ClojureScript test</title>
+    <title>Memoria</title>
   </head>
   <body>
+    {% for card in cards %}
+    <div class="card">
+      <p class="card-title">{{card.title}}</p>
+      <div class="card-contents">{{card.contents}}</div>
+    </div>
+    {% endfor %}
     <script src="js/memoria.js"></script>
   </body>
 </html>

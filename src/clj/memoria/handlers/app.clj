@@ -4,8 +4,12 @@
             [ring.middleware.params :refer  [wrap-params]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [taoensso.timbre :as timbre]
+            [selmer.parser :as selmer]
             [memoria.db :as db]
-            [memoria.handlers.cards :as cards-handler]))
+            [memoria.handlers.cards :as cards-handler]
+            [memoria.entities.cards :as cards]))
+
+(selmer.parser/set-resource-path! (clojure.java.io/resource "public"))
 
 (defn wrap-request-logging
   "Logs the data received in the request and the data generated in the response. Useful
@@ -31,7 +35,12 @@
       (binding [db/*conn* datasource]
         (app request)))))
 
+(defroutes page-routes
+  (GET "/" req (selmer.parser/render-file "app.html" {:cards (cards/all db/*conn*)})))
+
 (defroutes app-routes
+  (route/resources "/")
+  page-routes
   cards-handler/cards-routes)
 
 (def app
