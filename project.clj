@@ -22,9 +22,9 @@
 
   :plugins [[lein-ring "0.9.6"]
             [lein-environ "1.0.0"]
-            [lein-figwheel "0.3.9"]
-            [lein-cljsbuild "1.1.0"]]
+            [lein-figwheel "0.3.9"]]
 
+  :clean-targets [:target-path "resources/public/js/out"]
   :source-paths ["src/clj" "src/cljs"]
   :repl-options {:init  (require '[memoria.repl :refer :all])}
   :target-path "target/%s"
@@ -32,18 +32,13 @@
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[ring/ring-mock "0.2.0"]]}}
 
-  :cljsbuild {:builds
-              [{;; CLJS source code path
-                :source-paths ["src/cljs"]
-
-                ;; Google Closure (CLS) options configuration
-                :compiler {;; CLS generated JS script filename
-                           :output-to "resources/public/js/memoria.js"
-
-                           ;; minimal JS optimization directive
-                           :optimizations :whitespace
-
-                           ;; generated JS code prettyfication
-                           :pretty-print true}}]}
+  :cljsbuild {:builds [{:id "dev"
+                        :source-paths ["src/cljs/"]
+                        :figwheel true
+                        :compiler {:output-to "resources/public/js/memoria.js"
+                                   :output-dir "resources/public/js/out"
+                                   :main "memoria.app"
+                                   :asset-path "js/out"
+                                   :optimizations :none}}]}
 
   :ring  {:handler memoria.core/app})
