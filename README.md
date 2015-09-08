@@ -1,6 +1,6 @@
 # memoria
 
-FIXME: description
+![and i swear that i...](http://i.imgur.com/yUUFcNq.jpg)
 
 ## Installation
 
