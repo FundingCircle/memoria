@@ -6,18 +6,24 @@
 
 - PostgreSQL
 - JDK 1.8
+- NodeJS (if you need to change/update SemanticUI)
+- Gulp (if you need to change/update SemanticUI)
 
 ## Installation
 
-- Clone the project.
 - Create the databases:
-
 ```
 createdb memoria_dev
 createdb memoria_test
 ```
 
-- Migrate the database
+- Migrate the database (using a REPL session)
+
+```clojure
+(require '[memoria.db :as db])
+(migrate-db)
+(migrate-db :test)
+```
 
 ## Running the Ring server
 
@@ -25,57 +31,24 @@ createdb memoria_test
 lein trampoline ring server
 ```
 
-```
-brew install leiningen
-createdb memoria_test
-createdb memoria_dev
-lein deps
-```
-
-Run migrations, in REPL:
+## Running lein-figwheel
 
 ```
-(require '[memoria.db :as db])
-(db/migrate-db)
-(db/migrate-db :test)
-```
-
-Run development server
-
-```
-lein trampoline ring server
+lein figwheel dev
 ```
 
 ## Testing
 
 In REPL (example)
 
-```
+```clojure
 (use 'memoria.entities.cards-test :reload)
 (run-tests 'memoria.entities.cards-test)
 ```
 
-## Usage
+## If you need to change/update SemanticUI
 
-FIXME: explanation
-
-    $ java -jar memory_lane-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+Follow the instructions in the [SemanticUI documentation](http://semantic-ui.com/introduction/getting-started.html)
 
 ## License
 
