@@ -1,16 +1,32 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" type="text/css" href="semantic-ui/semantic.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <meta charset="utf-8">
     <title>Memoria</title>
   </head>
   <body>
-    {% for card in cards %}
-    <div class="card">
-      <p class="card-title">{{card.title}}</p>
-      <div class="card-contents">{{card.contents}}</div>
+    <div class="ui container main-content">
+      <div class="ui search search-box grid">
+        <div class="ui input search-input">
+          <input class="prompt" type="text" placeholder="Search for cards..."/>
+        </div>
+      </div>
+      <div class="ui grid sixteen container">
+        {% for card in cards %}
+        <div class="eight wide column">
+          <div class="ui container raised padded segment blue">
+            <h2 class="ui header"><a href="#">{{card.title}}</a></h2>
+            <div class="ui divider"></div>
+            <div class="card-contents">{{card.contents}}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    {% endfor %}
+    <script src="js/jquery.min.js"></script>
+    <script src="semantic-ui/semantic.min.js"></script>
     <script src="js/memoria.js"></script>
   </body>
 </html>

@@ -1,2 +1,13 @@
-.card {
+.main-content {
+  padding-top: 2%;;
+}
+
+.search-box input[type="text"] {
+  line-height: 2em;
+  height: 70px;
+  font-size: 28px;
+}
+
+.search-input {
+  width: 100%;
 }
