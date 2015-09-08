@@ -10,7 +10,7 @@
 
 (defn index [req]
   {:status 200
-   :body (cards/latest db/*conn* 10)})
+   :body (cards/latest db/*conn*)})
 
 (defn show [id]
   (let [card (cards/find-by-id db/*conn* (Integer. id))]

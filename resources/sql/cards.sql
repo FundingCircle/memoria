@@ -4,7 +4,7 @@ SELECT COUNT(*) FROM cards;
 
 -- name: select-latest-cards
 -- Selects latest cards
-SELECT * FROM cards WHERE id IN (SELECT DISTINCT ON (ancestor_id) id FROM cards ORDER BY ancestor_id DESC, id DESC LIMIT :count) ORDER BY id DESC;
+SELECT * FROM cards WHERE id IN (SELECT DISTINCT ON (ancestor_id) id FROM cards ORDER BY ancestor_id DESC, id DESC LIMIT :limit) ORDER BY id DESC;
 
 
 -- name: find-card-by-id
@@ -15,7 +15,7 @@ SELECT * FROM cards WHERE id = :id LIMIT 1;
 -- Inserts a new record into the cards table
 INSERT INTO cards (title, contents) VALUES (:title, :contents);
 
--- name: update-card<!
+-- name: insert-card-with-ancestor<!
 -- Inserts a new record with an ancestor_id into the cards table
 INSERT INTO cards (title, contents, ancestor_id) VALUES (:title, :contents, :ancestor_id);
 

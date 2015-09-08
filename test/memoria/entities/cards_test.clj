@@ -27,6 +27,11 @@
       (is (nil? (cards/find-by-id *conn* (+ 1 (:id card))))))))
 
 (deftest listing-latest-cards
+  (testing "Returns latest 10 cards when no number is specified"
+    (dotimes [n 11] (cards/insert *conn* card-attributes))
+    (is (= (count (cards/latest *conn*))
+           10)))
+
   (testing "Returns specified number of cards"
     (dotimes [n 3] (cards/insert *conn* card-attributes))
     (is (= (map #(:title %1) (cards/latest *conn* 2))
