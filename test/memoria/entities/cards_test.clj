@@ -26,10 +26,19 @@
     (testing "When there is no card with the given id"
       (is (nil? (cards/find-by-id *conn* (+ 1 (:id card))))))))
 
-(deftest listing-all-cards
-  (dotimes [n 3] (cards/insert *conn* card-attributes))
-  (is (= (map #(:title %1) (cards/all *conn*))
-         ["A Card" "A Card" "A Card"])))
+(deftest listing-latest-cards
+  (testing "Returns specified number of cards"
+    (dotimes [n 3] (cards/insert *conn* card-attributes))
+    (is (= (map #(:title %1) (cards/latest *conn* 2))
+           ["A Card" "A Card"])))
+
+  (testing "Only returns latest version of a card"
+    (let [old-card (cards/insert *conn* {:title "Old title" :contents "old contents"})
+          card (cards/insert *conn* card-attributes)]
+      (cards/update-by-id *conn* (:id card) {:title "New title"})
+      (cards/insert *conn* {:title "Another title" :contents "More contents"})
+      (is (= (map #(:title %1) (cards/latest *conn* 3))
+             ["Another title" "New title" "Old title"])))))
 
 (deftest cards-insertion
   (testing "Inserting a new card increases the total cards count"

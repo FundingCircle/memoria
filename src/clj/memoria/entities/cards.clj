@@ -27,10 +27,10 @@
   [db id]
   (first (find-card-by-id {:id id} {:connection db})))
 
-(defn all
+(defn latest
   "Returns all existent cards"
-  [db]
-  (select-all-cards {} {:connection db}))
+  [db count]
+  (select-latest-cards {:count count} {:connection db}))
 
 (defn insert
   "Inserts a new card record in the database"

@@ -2,9 +2,10 @@
 -- Counts the number of records existent in the cards table
 SELECT COUNT(*) FROM cards;
 
--- name: select-all-cards
--- Selects all cards
-SELECT * FROM cards;
+-- name: select-latest-cards
+-- Selects latest cards
+SELECT * FROM cards WHERE id IN (SELECT DISTINCT ON (ancestor_id) id FROM cards ORDER BY ancestor_id DESC, id DESC LIMIT :count) ORDER BY id DESC;
+
 
 -- name: find-card-by-id
 -- Find a card by id
