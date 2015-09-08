@@ -45,12 +45,11 @@
   [db id attrs]
   (let [c (find-by-id db id)
         attrs (validate (merge c attrs))]
-    (when (valid? attrs)
-      (update-card-by-id! (assoc attrs :id id) {:connection db}))
-    attrs))
+    (if (valid? attrs)
+       (update-card<! attrs {:connection db})
+       attrs)))
 
 (defn delete-by-id
   "Deletes the card having the given id"
   [db id]
   (delete-card-by-id! {:id id} {:connection db}))
-

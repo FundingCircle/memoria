@@ -54,7 +54,7 @@
       (let [attrs {:title "This is the new title" :contents "New contents"}
             response (do-patch (str "/cards/" (:id card)) attrs)
             {:keys [status body headers]} response
-            updated-card (cards/find-by-id *conn* (:id card))]
+            updated-card (cards/find-by-id *conn* (get body "id"))]
         (is (= status 200))
         (is (= (:title updated-card) "This is the new title"))
         (is (= (:contents updated-card) "New contents"))

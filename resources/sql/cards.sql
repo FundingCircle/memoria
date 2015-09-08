@@ -14,9 +14,9 @@ SELECT * FROM cards WHERE id = :id LIMIT 1;
 -- Inserts a new record into the cards table
 INSERT INTO cards (title, contents) VALUES (:title, :contents);
 
--- name: update-card-by-id!
--- Updates the card that has the given id
-UPDATE cards SET title = :title, contents = :contents WHERE id = :id;
+-- name: update-card<!
+-- Inserts a new record with an ancestor_id into the cards table
+INSERT INTO cards (title, contents, ancestor_id) VALUES (:title, :contents, :ancestor_id);
 
 -- name: delete-card-by-id!
 -- Deletes the card that has the given id
