@@ -25,6 +25,36 @@ createdb memoria_test
 lein trampoline ring server
 ```
 
+```
+brew install leiningen
+createdb memoria_test
+createdb memoria_dev
+lein deps
+```
+
+Run migrations, in REPL:
+
+```
+(require '[memoria.db :as db])
+(db/migrate-db)
+(db/migrate-db :test)
+```
+
+Run development server
+
+```
+lein trampoline ring server
+```
+
+## Testing
+
+In REPL (example)
+
+```
+(use 'memoria.entities.cards-test :reload)
+(run-tests 'memoria.entities.cards-test)
+```
+
 ## Usage
 
 FIXME: explanation
@@ -49,7 +79,6 @@ FIXME: listing of options this app accepts.
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Funding Circle Ltd.
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the BSD 3-Clause License.
