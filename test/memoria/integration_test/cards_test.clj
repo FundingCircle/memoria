@@ -8,12 +8,12 @@
 (setup-database-rollbacks :truncation)
 (setup-server-fixture)
 
-(deftest listing-all-cards
-  (let [cards (dotimes [n 2] (cards/insert *conn* {:title "A Card" :contents "These are the contents"}))]
+(deftest listing-latest-cards
+  (let [cards (dotimes [n 11] (cards/insert *conn* {:title "A Card" :contents "These are the contents"}))]
     (testing "It succeeds"
       (let [response (do-get "/cards")
             {:keys [status body headers]} response]
-        (is (= (count body) 2))
+        (is (= (count body) 10))
         (is (= (headers "content-type") "application/json; charset=utf-8"))
         (is (= status 200))
         (is (= (get (first body) "title") "A Card"))))))
@@ -54,7 +54,7 @@
       (let [attrs {:title "This is the new title" :contents "New contents"}
             response (do-patch (str "/cards/" (:id card)) attrs)
             {:keys [status body headers]} response
-            updated-card (cards/find-by-id *conn* (:id card))]
+            updated-card (cards/find-by-id *conn* (get body "id"))]
         (is (= status 200))
         (is (= (:title updated-card) "This is the new title"))
         (is (= (:contents updated-card) "New contents"))

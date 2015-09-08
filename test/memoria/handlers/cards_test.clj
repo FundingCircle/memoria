@@ -8,7 +8,7 @@
 (def a-card {:id 123 :title "A Card" :contents "The contents"})
 
 (deftest listing-cards
-  (with-redefs [cards/all (constantly [a-card])]
+  (with-redefs [cards/latest (constantly [a-card])]
     (let [response (cards-handler/cards-routes (mock/request :get "/cards"))]
       (testing "Responds with 200"
         (is (= (:status response) 200)))

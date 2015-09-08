@@ -26,10 +26,24 @@
     (testing "When there is no card with the given id"
       (is (nil? (cards/find-by-id *conn* (+ 1 (:id card))))))))
 
-(deftest listing-all-cards
-  (dotimes [n 3] (cards/insert *conn* card-attributes))
-  (is (= (map #(:title %1) (cards/all *conn*))
-         ["A Card" "A Card" "A Card"])))
+(deftest listing-latest-cards
+  (testing "Returns latest 10 cards when no number is specified"
+    (dotimes [n 11] (cards/insert *conn* card-attributes))
+    (is (= (count (cards/latest *conn*))
+           10)))
+
+  (testing "Returns specified number of cards"
+    (dotimes [n 3] (cards/insert *conn* card-attributes))
+    (is (= (map #(:title %1) (cards/latest *conn* 2))
+           ["A Card" "A Card"])))
+
+  (testing "Only returns latest version of a card"
+    (let [old-card (cards/insert *conn* {:title "Old title" :contents "old contents"})
+          card (cards/insert *conn* card-attributes)]
+      (cards/update-by-id *conn* (:id card) {:title "New title"})
+      (cards/insert *conn* {:title "Another title" :contents "More contents"})
+      (is (= (map #(:title %1) (cards/latest *conn* 3))
+             ["Another title" "New title" "Old title"])))))
 
 (deftest cards-insertion
   (testing "Inserting a new card increases the total cards count"
@@ -52,20 +66,31 @@
       (is (some? (:errors card))))))
 
 (deftest update-cards
-  (testing "Updates the database record for the card"
+  (testing "It does not update the database record for the card"
     (let [card (cards/insert *conn* card-attributes)
           updated-card (cards/update-by-id *conn* (:id card) {:title "New title" :contents "New contents"})
           reloaded-card (cards/find-by-id *conn* (:id card))]
-      (is (= (:title reloaded-card) "New title"))
-      (is (= (:contents reloaded-card) "New contents"))))
+      (is (= (:title reloaded-card) "A Card"))
+      (is (= (:contents reloaded-card) "These are the card's contents"))))
 
-  (testing "Returns the updated card"
+  (testing "Creates a new record from the updated attributes"
     (let [card (cards/insert *conn* card-attributes)
           updated-card (cards/update-by-id *conn* (:id card) {:title "New title" :contents "New contents"})]
-      (println updated-card)
+      (is (not= (:id updated-card) (:id card)))
+      (is (= (:ancestor_id updated-card) (:id card)))
       (is (= (:title updated-card) "New title"))
-
       (is (= (:contents updated-card) "New contents"))))
+
+  (testing "It keeps contents if unchanged"
+    (let [card (cards/insert *conn* card-attributes)
+          updated-card (cards/update-by-id *conn* (:id card) {:title "New title"})]
+      (is (= (:title updated-card) "New title"))
+      (is (= (:contents updated-card) "These are the card's contents"))))
+
+  (testing "It keeps title if unchanged"
+    (let [card (cards/insert *conn* card-attributes)
+          updated-card (cards/update-by-id *conn* (:id card) {:contents "New contents"})]
+      (is (= (:title updated-card) "A Card"))))
 
   (testing "Fails if the attributes are invalid"
     (let [card (cards/insert *conn* card-attributes)

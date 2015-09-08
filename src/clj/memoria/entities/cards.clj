@@ -27,10 +27,10 @@
   [db id]
   (first (find-card-by-id {:id id} {:connection db})))
 
-(defn all
-  "Returns all existent cards"
-  [db]
-  (select-all-cards {} {:connection db}))
+(defn latest
+  "Returns latest cards"
+  ([db] (latest db 10))
+  ([db limit] (select-latest-cards {:limit limit} {:connection db})))
 
 (defn insert
   "Inserts a new card record in the database"
@@ -45,12 +45,11 @@
   [db id attrs]
   (let [c (find-by-id db id)
         attrs (validate (merge c attrs))]
-    (when (valid? attrs)
-      (update-card-by-id! (assoc attrs :id id) {:connection db}))
-    attrs))
+    (if (valid? attrs)
+       (insert-card-with-ancestor<! attrs {:connection db})
+       attrs)))
 
 (defn delete-by-id
   "Deletes the card having the given id"
   [db id]
   (delete-card-by-id! {:id id} {:connection db}))
-
