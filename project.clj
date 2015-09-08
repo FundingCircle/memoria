@@ -41,4 +41,6 @@
                                    :asset-path "js/out"
                                    :optimizations :none}}]}
 
+  :figwheel {:css-dirs ["resources/public/css"]}
+
   :ring  {:handler memoria.core/app})
