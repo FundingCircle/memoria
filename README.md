@@ -2,9 +2,28 @@
 
 ![and i swear that i...](http://i.imgur.com/yUUFcNq.jpg)
 
+## Dependencies
+
+- PostgreSQL
+- JDK 1.8
+
 ## Installation
 
-Download from http://example.com/FIXME.
+- Clone the project.
+- Create the databases:
+
+```
+createdb memoria_dev
+createdb memoria_test
+```
+
+- Migrate the database
+
+## Running the Ring server
+
+```
+lein trampoline ring server
+```
 
 ## Usage
 
