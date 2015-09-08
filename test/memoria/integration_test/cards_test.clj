@@ -79,3 +79,13 @@
         (is (= status 200))
         (is (= body {}))
         (is (nil? reloaded-card))))))
+
+(deftest searching-cards
+  (let [pretty-card (cards/insert *conn* {:title "This is a pretty card" :contents "These are pretty contents"})
+        another-pretty-card (cards/insert *conn* {:title "Another pretty card" :contents "More prettiness"})
+        ugly-card (cards/insert *conn* {:title "This is an ugly card" :contents "These are ugly contents"})]
+    (testing "It returns only cards the match the search term"
+      (let [response (do-get "/search-cards" {:q "pretty"})
+            {:keys [status body headers]} response]
+        (is (= status 200))
+        (is (= (count body) 2))))))

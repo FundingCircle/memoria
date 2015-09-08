@@ -12,6 +12,10 @@
   {:status 200
    :body (cards/latest db/*conn*)})
 
+(defn search [{:keys [params] :as req}]
+  {:status 200
+   :body (cards/search db/*conn* (get params "q" ""))})
+
 (defn show [id]
   (let [card (cards/find-by-id db/*conn* (Integer. id))]
     (if (some? card)
@@ -46,6 +50,7 @@
 
 (defroutes cards-routes
   (GET "/cards" req (index req))
+  (GET "/search-cards" req (search req))
   (GET "/cards/:id" [id :as req] (show id))
   (POST "/cards" {body :body :as req} (create body))
   (PATCH "/cards/:id" {body :body {id :id} :params} (update-card id body))

@@ -35,7 +35,7 @@
   ([url params] (do-get url params {}))
   ([url params headers]
    (let [headers (merge-headers headers)
-         f #(http/get (str host url) {:params params :headers headers})
+         f #(http/get (str host url) {:query-params params :headers headers})
          response (send-request-handling-errors f)]
      (assoc response :body (json/read-str (:body response))))))
 

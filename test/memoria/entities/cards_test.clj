@@ -100,5 +100,19 @@
 (deftest delete-cards
   (let [card (cards/insert *conn* card-attributes)]
     (testing "Deletes the card having the given id"
-    (cards/delete-by-id *conn* (:id card))
-    (is (nil? (cards/find-by-id *conn* (:id card)))))))
+      (cards/delete-by-id *conn* (:id card))
+      (is (nil? (cards/find-by-id *conn* (:id card)))))))
+
+(deftest search-cards-test
+  (let [c1 (cards/insert *conn* {:title "Clojure is a cool programming language", :contents "Any contents"})
+        c2 (cards/insert *conn* {:title "Annoying things", :contents "Cars and computers"})
+        c3 (cards/insert *conn* {:title "Programming languages" :contents "Clojure and Ruby are programming languages"})
+        c4 (cards/insert *conn* {:title "computers never work" :contents "But they are fun anyway"})]
+    (testing "returns everything that matches the search term"
+      (is (= (map :id (cards/search *conn* "programming")) [(:id c1) (:id c3)])))
+
+    (testing "the title has a higher precedence than the contents in the results"
+      (is (= (map :id (cards/search *conn* "computers")) [(:id c4) (:id c2)])))
+
+    (testing "can search with multiple terms"
+      (is (= (map :id (cards/search *conn* "programming languages")) [(:id c1) (:id c3)])))))
