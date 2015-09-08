@@ -36,7 +36,7 @@
         (app request)))))
 
 (defroutes page-routes
-  (GET "/" req (selmer.parser/render-file "app.html" {:cards (cards/all db/*conn*)})))
+  (GET "/" req (selmer.parser/render-file "index.html" {:cards (cards/all db/*conn*)})))
 
 (defroutes app-routes
   (route/resources "/")
