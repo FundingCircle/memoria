@@ -1,0 +1,61 @@
+{
+  "base": "semantic/",
+  "paths": {
+    "source": {
+      "config": "src/theme.config",
+      "definitions": "src/definitions/",
+      "site": "src/site/",
+      "themes": "src/themes/"
+    },
+    "output": {
+      "packaged": "../public/resources/semantic-ui/",
+      "uncompressed": "../public/resources/semantic-ui/components/",
+      "compressed": "../public/resources/semantic-ui/components/",
+      "themes": "../public/resources/semantic-ui/themes/"
+    },
+    "clean": "public/resources/semantic-ui/"
+  },
+  "permission": false,
+  "rtl": "No",
+  "components": [
+    "reset",
+    "site",
+    "button",
+    "container",
+    "divider",
+    "header",
+    "icon",
+    "image",
+    "input",
+    "label",
+    "list",
+    "loader",
+    "reveal",
+    "segment",
+    "form",
+    "grid",
+    "menu",
+    "message",
+    "table",
+    "card",
+    "comment",
+    "item",
+    "statistic",
+    "checkbox",
+    "dropdown",
+    "embed",
+    "modal",
+    "popup",
+    "rating",
+    "search",
+    "shape",
+    "sidebar",
+    "tab",
+    "transition",
+    "api",
+    "form",
+    "state",
+    "visibility"
+  ],
+  "version": "2.1.3"
+}
