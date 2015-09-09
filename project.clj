@@ -24,6 +24,7 @@
 
   :plugins [[lein-ring "0.9.6"]
             [lein-environ "1.0.0"]
+            [lein-cljsbuild "1.1.0"]
             [lein-figwheel "0.3.9"]]
 
   :clean-targets [:target-path "resources/public/js/out"]
