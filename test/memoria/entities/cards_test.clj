@@ -34,7 +34,7 @@
 
   (testing "Returns specified number of cards"
     (dotimes [n 3] (cards/insert *conn* card-attributes))
-    (is (= (map #(:title %1) (cards/latest *conn* 2))
+    (is (= (map #(:title %1) (cards/latest *conn* 1 2))
            ["A Card" "A Card"])))
 
   (testing "Only returns latest version of a card"
@@ -42,7 +42,7 @@
           card (cards/insert *conn* card-attributes)]
       (cards/update-by-id *conn* (:id card) {:title "New title"})
       (cards/insert *conn* {:title "Another title" :contents "More contents"})
-      (is (= (map #(:title %1) (cards/latest *conn* 3))
+      (is (= (map #(:title %1) (cards/latest *conn* 1 3))
              ["Another title" "New title" "Old title"])))))
 
 (deftest cards-insertion

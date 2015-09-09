@@ -9,14 +9,16 @@
 (setup-server-fixture)
 
 (deftest listing-latest-cards
-  (let [cards (dotimes [n 11] (cards/insert *conn* {:title "A Card" :contents "These are the contents"}))]
+  (let [cards (cards/insert *conn* {:title "First Card" :contents "First contents"})
+        more-cards (dotimes [n 11] (cards/insert *conn* {:title "A Card" :contents "These are the contents"}))]
     (testing "It succeeds"
-      (let [response (do-get "/cards")
+      (let [response (do-get "/cards?page=2")
             {:keys [status body headers]} response]
-        (is (= (count body) 10))
+        (is (= (count body) 2))
         (is (= (headers "content-type") "application/json; charset=utf-8"))
         (is (= status 200))
-        (is (= (get (first body) "title") "A Card"))))))
+        (is (= (get (first body) "title") "A Card"))
+        (is (= (get (second body) "title") "First Card"))))))
 
 (deftest getting-a-card-by-id
   (let [card (cards/insert *conn* {:title "A Card" :contents "These are the contents"})]
@@ -83,9 +85,12 @@
 (deftest searching-cards
   (let [pretty-card (cards/insert *conn* {:title "This is a pretty card" :contents "These are pretty contents"})
         another-pretty-card (cards/insert *conn* {:title "Another pretty card" :contents "More prettiness"})
-        ugly-card (cards/insert *conn* {:title "This is an ugly card" :contents "These are ugly contents"})]
+        ugly-card (cards/insert *conn* {:title "This is an ugly card" :contents "These are ugly contents"})
+        more-cards (dotimes [n 10] (cards/insert *conn* {:title "Another card" :contents "Not quite as pretty"}))]
     (testing "It returns only cards the match the search term"
       (let [response (do-get "/search-cards" {:q "pretty"})
             {:keys [status body headers]} response]
         (is (= status 200))
-        (is (= (count body) 2))))))
+        (is (= (count body) 10))
+        (is (= (get (first body) "title") "Another pretty card"))
+        (is (= (get (second body) "title") "This is a pretty card"))))))

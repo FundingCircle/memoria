@@ -8,13 +8,13 @@
             [clojure.walk :refer [keywordize-keys]]
             [ring.middleware.json :refer [wrap-json-response]]))
 
-(defn index [req]
+(defn index [{:keys [params] :as req}]
   {:status 200
-   :body (cards/latest db/*conn*)})
+   :body (cards/latest db/*conn* (Integer. (get params "page" 1)) 10)})
 
 (defn search [{:keys [params] :as req}]
   {:status 200
-   :body (cards/search db/*conn* (get params "q" ""))})
+   :body (cards/search db/*conn* (get params "q" "") (Integer. (get params "page" 1)) 10)})
 
 (defn show [id]
   (let [card (cards/find-by-id db/*conn* (Integer. id))]
