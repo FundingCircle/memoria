@@ -6,7 +6,7 @@
 
 (setup-database-rollbacks :transaction)
 
-(def card-attributes {:title "A Card" :contents "These are the card's contents"})
+(def card-attributes {:title "A Card" :contents "These are the card's contents" :tags "tag1 tag2 tag3"})
 
 (deftest validations
   (let [card (cards/validate {})]
@@ -104,14 +104,14 @@
       (is (nil? (cards/find-by-id *conn* (:id card)))))))
 
 (deftest search-cards-test
-  (let [c1 (cards/insert *conn* {:title "Clojure is a cool programming language", :contents "Any contents"})
-        c2 (cards/insert *conn* {:title "Annoying things", :contents "Cars and computers"})
-        c3 (cards/insert *conn* {:title "Programming languages" :contents "Clojure and Ruby are programming languages"})
-        c4 (cards/insert *conn* {:title "computers never work" :contents "But they are fun anyway"})
+  (let [c1 (cards/insert *conn* {:tags "this-is-a-tag" :title "Clojure is a cool programming language", :contents "Any contents"})
+        c2 (cards/insert *conn* {:tags "this-is-a-tag" :title "Annoying things", :contents "Cars and computers"})
+        c3 (cards/insert *conn* {:tags "this-is-a-tag" :title "Programming languages" :contents "Clojure and Ruby are programming languages"})
+        c4 (cards/insert *conn* {:tags "this-is-a-tag" :title "computers never work" :contents "But they are fun anyway"})
         c5 (cards/update-by-id *conn* (:id c3) {:title "Programming Languages"})]
 
     (testing "returns current cards that match the search term"
-      (is (= (map :id (cards/search *conn* "programming")) [(:id c1) (:id c5)])))
+      (is (= (map :id (cards/search *conn* "programming")) [(:id c5) (:id c1)])))
 
     (testing "does not return ancestor cards"
       (is (not (some #{(:id c3)} (map :id (cards/search *conn* "programming")) ))))
@@ -120,4 +120,4 @@
       (is (= (map :id (cards/search *conn* "computers")) [(:id c4) (:id c2)])))
 
     (testing "can search with multiple terms"
-      (is (= (map :id (cards/search *conn* "programming languages")) [(:id c1) (:id c5)])))))
+      (is (= (map :id (cards/search *conn* "programming languages")) [(:id c5) (:id c1)])))))
