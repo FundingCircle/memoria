@@ -25,7 +25,8 @@
   [:div {:class "eight wide column" :key (:id card)}
    [:div {:class "memoria-card ui container raised padded segment blue"}
     [:div {:class "ui header"}
-     [:h2 [:a {:href "#"} (:title card)]]]
+     [:h2 [:a {:href "#"} (:title card)]]
+     [:span {:class "tags"} (:tags card)]]
     [:div {:class "ui divider"}]
     [:div {:class "card-contents"} (:contents card)]]])
 
