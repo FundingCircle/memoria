@@ -12,7 +12,7 @@
   (let [cards (cards/insert *conn* {:title "First Card" :contents "First contents"})
         more-cards (dotimes [n 11] (cards/insert *conn* {:title "A Card" :contents "These are the contents"}))]
     (testing "It succeeds"
-      (let [response (do-get "/cards?page=2")
+      (let [response (do-get "/cards" {:page "2"})
             {:keys [status body headers]} response]
         (is (= (count body) 2))
         (is (= (headers "content-type") "application/json; charset=utf-8"))
@@ -86,14 +86,15 @@
   (let [pretty-card (cards/insert *conn* {:title "This is a pretty card" :contents "These are pretty contents"})
         another-pretty-card (cards/insert *conn* {:title "Another pretty card" :contents "More prettiness"})
         ugly-card (cards/insert *conn* {:title "This is an ugly card" :contents "These are ugly contents"})
-        more-cards (dotimes [n 10] (cards/insert *conn* {:title "Another card" :contents "Not quite as pretty"}))]
+        more-cards (dotimes [n 9] (cards/insert *conn* {:title "Another card" :contents "Not quite as pretty"}))
+        latest-card (cards/insert *conn* {:title "Yet another card" :contents "Not quite as pretty"})]
     (testing "It returns only cards the match the search term"
-      (let [response (do-get "/search-cards" {:q "pretty"})
+      (let [response (do-get "/search-cards" {:q "pretty" :page "2"})
             {:keys [status body headers]} response]
         (is (= status 200))
-        (is (= (count body) 10))
-        (is (= (get (first body) "title") "Another pretty card"))
-        (is (= (get (second body) "title") "This is a pretty card"))))
+        (is (= (count body) 2))
+        (is (= (get (first body) "title") "Another card"))
+        (is (= (get (second body) "title") "Yet another card"))))
 
     (testing "It returns the latest cards when the search term is empty"
       (let [response (do-get "/search-cards" {})
