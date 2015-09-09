@@ -839,16 +839,16 @@ a.ui.basic.violet.label:hover {
 
 .ui.purple.labels .label,
 .ui.purple.label {
-  background-color: #a333c8 !important;
-  border-color: #a333c8 !important;
+  background-color: #952d72 !important;
+  border-color: #952d72 !important;
   color: #ffffff !important;
 }
 
 /* Link */
 .ui.purple.labels .label:hover,
 a.ui.purple.label:hover {
-  background-color: #9627ba !important;
-  border-color: #9627ba !important;
+  background-color: #862364 !important;
+  border-color: #862364 !important;
   color: #ffffff !important;
 }
 
@@ -860,20 +860,20 @@ a.ui.purple.label:hover {
 
 /* Ribbon */
 .ui.purple.ribbon.label {
-  border-color: #82299f !important;
+  border-color: #6e2154 !important;
 }
 
 /* Basic */
 .ui.basic.purple.label {
   background-color: #ffffff !important;
-  color: #a333c8 !important;
-  border-color: #a333c8 !important;
+  color: #952d72 !important;
+  border-color: #952d72 !important;
 }
 .ui.basic.purple.labels a.label:hover,
 a.ui.basic.purple.label:hover {
   background-color: #ffffff !important;
-  color: #9627ba !important;
-  border-color: #9627ba !important;
+  color: #862364 !important;
+  border-color: #862364 !important;
 }
 
 /*--- Pink ---*/
@@ -1055,7 +1055,7 @@ a.ui.basic.black.label:hover {
 a.ui.basic.label:hover {
   text-decoration: none;
   background: none #ffffff;
-  color: #1e70bf;
+  color: #8f1666;
   box-shadow: 1px solid rgba(34, 36, 38, 0.15);
   box-shadow: none;
 }

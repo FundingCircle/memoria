@@ -482,13 +482,13 @@ a.ui.inverted.violet.header:hover {
 /*--- Purple ---*/
 
 .ui.purple.header {
-  color: #a333c8 !important;
+  color: #952d72 !important;
 }
 a.ui.purple.header:hover {
-  color: #9627ba !important;
+  color: #862364 !important;
 }
 .ui.purple.dividing.header {
-  border-bottom: 2px solid #a333c8;
+  border-bottom: 2px solid #952d72;
 }
 
 /* Inverted */
