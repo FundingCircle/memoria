@@ -1,5 +1,6 @@
 (ns memoria.entities.cards
-  (:require [yesql.core :refer [defqueries]]
+  (:require [clojure.string :as s]
+            [yesql.core :refer [defqueries]]
             [bouncer.core :as b]
             [bouncer.validators :as v]))
 
@@ -32,12 +33,18 @@
   ([db] (latest db 10))
   ([db limit] (select-latest-cards {:limit limit} {:connection db})))
 
+(defn search
+  "Searches for cards"
+  [db q]
+  (let [search-term (s/join " & " (s/split q #" "))]
+    (search-cards {:query search-term} {:connection db})))
+
 (defn insert
   "Inserts a new card record in the database"
   [db {:keys [title contents]}]
   (let [attrs (validate {:title title :contents contents})]
     (if (valid? attrs)
-      (insert-card<! attrs {:connection db})
+      (dissoc (insert-card<! attrs {:connection db}) :tsv)
       attrs)))
 
 (defn update-by-id
@@ -46,7 +53,7 @@
   (let [c (find-by-id db id)
         attrs (validate (merge c attrs))]
     (if (valid? attrs)
-       (insert-card-with-ancestor<! attrs {:connection db})
+       (dissoc (insert-card-with-ancestor<! attrs {:connection db}) :tsv)
        attrs)))
 
 (defn delete-by-id
