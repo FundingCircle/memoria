@@ -14,9 +14,10 @@
 
 (defn search [{:keys [params] :as req}]
   (let [q (get params "q")
+        page (Integer. (get params "page" 1))
         cards (if (nil? q)
-                (cards/latest db/*conn*)
-                (cards/search db/*conn* q))]
+                (cards/latest db/*conn* page 10)
+                (cards/search db/*conn* q page 10))]
     {:status 200
      :body cards}))
 
