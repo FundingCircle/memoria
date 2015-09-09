@@ -93,4 +93,10 @@
         (is (= status 200))
         (is (= (count body) 10))
         (is (= (get (first body) "title") "Another pretty card"))
-        (is (= (get (second body) "title") "This is a pretty card"))))))
+        (is (= (get (second body) "title") "This is a pretty card"))))
+
+    (testing "It returns the latest cards when the search term is empty"
+      (let [response (do-get "/search-cards" {})
+            {:keys [status body headers]} response]
+        (is (= status 200))
+        (is (= (count body) 10))))))
