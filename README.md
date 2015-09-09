@@ -21,8 +21,8 @@ createdb memoria_test
 
 ```clojure
 (require '[memoria.db :as db])
-(migrate-db)
-(migrate-db :test)
+(db/migrate-db)
+(db/migrate-db :test)
 ```
 
 ## Running the Ring server
