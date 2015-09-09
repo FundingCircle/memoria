@@ -12,6 +12,10 @@
   font-size: 28px;
 }
 
+.search-box form {
+  width: 100%;
+}
+
 .search-input {
   width: 100%;
 }
