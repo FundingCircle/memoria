@@ -569,10 +569,10 @@
 
 /* Purple */
 .ui.purple.segment:not(.inverted) {
-  border-top: 2px solid #a333c8;
+  border-top: 2px solid #952d72;
 }
 .ui.inverted.purple.segment {
-  background-color: #a333c8 !important;
+  background-color: #952d72 !important;
   color: #ffffff !important;
 }
 
