@@ -30,14 +30,15 @@
 
 (defn latest
   "Returns latest cards"
-  ([db] (latest db 10))
-  ([db limit] (select-latest-cards {:limit limit} {:connection db})))
+  ([db] (latest db 1 10))
+  ([db page limit] (select-latest-cards {:offset (* (dec page) limit) :limit limit} {:connection db})))
 
 (defn search
   "Searches for cards"
-  [db q]
-  (let [search-term (s/join " & " (s/split q #" "))]
-    (search-cards {:query search-term} {:connection db})))
+  ([db q] (search db q 1 10))
+  ([db q page limit]
+    (let [search-term (s/join " & " (s/split q #" "))]
+      (search-cards {:query search-term :offset (* (dec page) limit) :limit limit} {:connection db}))))
 
 (defn insert
   "Inserts a new card record in the database"

@@ -4,12 +4,12 @@ SELECT COUNT(*) FROM cards;
 
 -- name: select-latest-cards
 -- Selects latest cards
-SELECT id, title, contents FROM cards WHERE id IN (SELECT DISTINCT ON (ancestor_id) id FROM cards ORDER BY ancestor_id DESC, id DESC LIMIT :limit) ORDER BY id DESC;
+SELECT id, title, contents FROM cards WHERE id IN (SELECT DISTINCT ON (ancestor_id) id FROM cards ORDER BY ancestor_id DESC, id DESC LIMIT :limit OFFSET :offset) ORDER BY id DESC;
 
 -- name: search-cards
 -- Searches card using PostgreSQL full text search. Read http://shisaa.jp/postset/postgresql-full-text-search-part-3.html to
 -- better understand what it does.
-SELECT id, title, contents, ts_rank(tsv, tsquery, 1) as rank FROM cards, to_tsquery(:query) tsquery WHERE tsquery @@ tsv GROUP BY tsquery, id HAVING id IN (SELECT DISTINCT ON (ancestor_id) id FROM cards ORDER BY ancestor_id DESC, id DESC) ORDER BY rank DESC, id DESC;
+SELECT id, title, contents, ts_rank(tsv, tsquery, 1) as rank FROM cards, to_tsquery(:query) tsquery WHERE tsquery @@ tsv GROUP BY tsquery, id HAVING id IN (SELECT DISTINCT ON (ancestor_id) id FROM cards ORDER BY ancestor_id DESC, id DESC) ORDER BY rank DESC, id DESC LIMIT :limit OFFSET :offset;
 
 -- name: find-card-by-id
 -- Find a card by id
