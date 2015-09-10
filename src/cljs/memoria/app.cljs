@@ -48,7 +48,8 @@
                 :on-change #(reset! search-term (-> %1 .-target .-value))}]]]]))
 
 (defn index-page-component []
-  [:div {:class "banner"}
+  [:div
+  [:div {:class "banner" :key "banner"}]
    [:div {:class "ui container main-content" :key "index-page-component"}
     [search-box-component]
     [cards-list-component @cards]]])
