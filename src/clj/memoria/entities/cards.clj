@@ -42,8 +42,8 @@
 
 (defn insert
   "Inserts a new card record in the database"
-  [db {:keys [title contents]}]
-  (let [attrs (validate {:title title :contents contents})]
+  [db {:keys [title contents tags]}]
+  (let [attrs (validate {:title title :contents contents :tags tags})]
     (if (valid? attrs)
       (dissoc (insert-card<! attrs {:connection db}) :tsv)
       attrs)))
