@@ -1,79 +1,30 @@
 (ns memoria.app
   (:require [reagent.core :as r]
             [ajax.core :as a]
-            [clojure.string :as s]))
+            [memoria.ajax :refer [do-get]]
+            [memoria.cards-list :refer [card-component cards-list-component]]
+            [memoria.search-box :refer [search-box-component]]
+            [memoria.add-card :refer [add-card-component]]))
 
-(def jquery (js* "$"))
+(def ^:private jquery (js* "$"))
 
 (defn- max-length
   "Will reduce the contents of a card to n characters and if it gets reduced add on ..."
   [n s]
   (s/join [(if (> (count s) n) (str (subs s 0 n) "...") s)]))
 
-(defn error-handler [{:keys [status status-text]}]
-  (.log js/console
-        (str "Something bad happened: " status " " status-text)))
-
 (defonce cards (r/atom []))
 
-(defn do-get
-  ([path handler] (do-get path handler {}))
-  ([path handler params] (a/GET path {:headers {"Content-Type" "application/json"}
-                              :params params
-                              :format :json
-                              :response-format :json
-                              :keywords? true
-                              :prefix "while(1);"
-                              :handler handler
-                              :error-handler error-handler})))
-
-(defn card-modal-component [card]
-  (.log js/console card)
-  [:div {:class "ui container"} (:contents card)])
-
-(defn card-component [card]
-  (let [on-title-clicked (fn [event]
-                           (let [card-id (-> event .-target jquery (.data "id"))
-                                 url (str "/cards/" card-id)
-                                 card (do-get url #(r/render [card-modal-component %1] (.getElementById js/document "modal")))]
-                             (-> (jquery "#modal")
-                                 (.modal "show"))))]
-
-    [:div {:class "eight wide column" :key (:id card)}
-     [:div {:class "memoria-card ui container raised padded segment purple"}
-      [:div {:class "ui header"}
-       [:h2 [:a {:href "#"
-                 :data-id (:id card)
-                 :on-click on-title-clicked} (:title card)]]
-       [:span {:class "tags"} (:tags card)]]
-      [:div {:class "ui divider"}]
-      [:div {:class "card-contents"} (max-length 400 (:contents card))]]]))
-
-(defn cards-list-component [cards]
-  [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
-   (for [card cards] [card-component card])])
-
-(defn search-box-component []
-  (let [search-term (r/atom nil)
-        on-search-submit (fn [event search-term]
-                           (.preventDefault event)
-                           (do-get "/search-cards"
-                                        #(reset! cards %1)
-                                        {:q search-term}))]
-
-    [:div {:class "ui search search-box grid" :key "search-box-component"}
-     [:form {:action "#" :on-submit #(on-search-submit %1 @search-term)}
-      [:div {:class "ui input search-input"}
-       [:input {:class "prompt"
-                :type "text"
-                :placeholder "Search for cards..."
-                :on-change #(reset! search-term (-> %1 .-target .-value))}]]]]))
+(defn banner-component []
+  [:div {:class "banner" :key "banner"}
+   [:h1 "Memoria v0.1"]])
 
 (defn index-page-component []
   [:div
-   [:div {:class "banner" :key "banner"}]
+   [add-card-component]
+   [banner-component]
    [:div {:class "ui container main-content" :key "index-page-component"}
-    [search-box-component]
+    [search-box-component cards]
     [cards-list-component @cards]]])
 
 (defn render-index-page []
@@ -84,6 +35,5 @@
   (render-index-page))
 
 (defn ^:export init []
-  (render-index-page)
   (load-latest-cards))
 

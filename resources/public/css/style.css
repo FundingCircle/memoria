@@ -2,12 +2,34 @@
   padding-top: 2%;
 }
 
+/*-----------------------------
+  Modal
+-----------------------------*/
+
+.memoria-modal {
+  padding: 2em;
+}
+
+.add-card .button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+.ui.modal>.header {
+  border: none;
+}
+
 .banner {
-  padding-top: 3%;
+  padding: 10px;
   background-color: #952d72;
   width: 100%;
-  font-size: 20px;
-  height: 40px;
+}
+
+.banner h1 {
+  font-family: 'Source Code Pro';
+  font-size: 1.2rem;
+  color: white;
 }
 
 .memoria-card {
