@@ -55,7 +55,8 @@
     "api",
     "form",
     "state",
-    "visibility"
+    "visibility",
+    "dimmer"
   ],
   "version": "2.1.3"
 }
