@@ -7,8 +7,7 @@
             [selmer.parser :as selmer]
             [memoria.db :as db]
             [memoria.handlers.cards :as cards-handler]
-            [memoria.entities.cards :as cards]
-            [memoria.tags]))
+            [memoria.entities.cards :as cards]))
 
 (selmer.parser/set-resource-path! (clojure.java.io/resource "public"))
 
