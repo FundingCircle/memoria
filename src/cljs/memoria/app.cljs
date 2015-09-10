@@ -49,7 +49,7 @@
 
 (defn index-page-component []
   [:div
-  [:div {:class "banner" :key "banner"}]
+   [:div {:class "banner" :key "banner"}]
    [:div {:class "ui container main-content" :key "index-page-component"}
     [search-box-component]
     [cards-list-component @cards]]])
