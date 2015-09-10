@@ -10,6 +10,8 @@
   [n s]
   (s/join [(if (> (count s) n) (str (subs s 0 n) "...") s)]))
 
+(def jquery (js* "$"))
+
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console
         (str "Something bad happened: " status " " status-text)))
@@ -31,6 +33,15 @@
   (.log js/console card)
   [:div {:class "ui container"} (:contents card)])
 
+(defn create-card [params]
+  (a/POST "/cards" {:headers {"Content-Type" "application/json"}
+                    :params params
+                    :format :json
+                    :response-format :json
+                    :keywords? true
+                    :handler true
+                    :error-handler error-handler}))
+
 (defn card-component [card]
   (let [on-title-clicked (fn [event]
                            (let [card-id (-> event .-target jquery (.data "id"))
@@ -48,6 +59,47 @@
        [:span {:class "tags"} (:tags card)]]
       [:div {:class "ui divider"}]
       [:div {:class "card-contents"} (max-length 400 (:contents card))]]]))
+
+(defn add-card-modal []
+  (let [title (r/atom nil)
+        content (r/atom nil)
+        tags (r/atom nil)
+        on-add-card-submit (fn [event params]
+                           (.preventDefault event)
+                           (create-card {:title title
+                                         :content content
+                                         :tags tags}))]
+
+    [:div {:class "ui segment modal" :key "add-card-modal"}
+     [:h2 {:class "ui center aligned icon header"}
+      [:i {:class "circular plus purple icon"}]
+      [:content {:class "content"} "Add card"]]
+
+    [:form {:class "ui small form"}
+     [:div {:class "required field"}
+      [:label "Title"]
+      [:input {:type "text"}]]
+     [:div {:class "required field"}
+      [:label "Content"]
+      [:textarea {:rows "5"}]]
+     [:div {:class "field"}
+      [:label "Tags"]
+      [:input {:type "text"}]]
+     [:button {:class "ui center aligned button" :type "submit"} "Submit"]]]))
+
+
+(defn add-card-button [show-modal]
+  [:button {:class "circular ui icon button massive" :key "add-card-button" :on-click show-modal}
+   [:i {:class "icon plus purple"}]])
+
+(defn add-card-component []
+  (let [on-click (fn [] (-> (jquery ".ui.modal")
+                            (.modal "show")))]
+
+  [:div {:class "add-card" :key "add-card-component"}
+   [add-card-button on-click]
+   [add-card-modal]]))
+
 
 (defn cards-list-component [cards]
   [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
@@ -71,7 +123,9 @@
 
 (defn index-page-component []
   [:div
-   [:div {:class "banner" :key "banner"}]
+   [add-card-component]
+   [:div {:class "banner" :key "banner"}
+    [:h1 "Memoria v0.1"]]
    [:div {:class "ui container main-content" :key "index-page-component"}
     [search-box-component]
     [cards-list-component @cards]]])
