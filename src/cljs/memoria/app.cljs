@@ -6,7 +6,7 @@
 (defn- max-length
   "Will reduce the contents of a card to n characters and if it gets reduced add on ..."
   [n s]
-  (s/join [(apply str (take n s)) (if (>= (count s) n) "...")]))
+  (s/join [(if (> (count s) n) (str (subs s 0 n) "...") s)]))
 
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console
