@@ -1,17 +1,18 @@
 (ns memoria.cards-list
   (:require [reagent.core :as r]
             [clojure.string :as s]
+            [memoria.formatting :as formatting]
             [memoria.ajax :refer [do-get]]))
 
 (def ^:private jquery (js* "$"))
 
-(defn- max-length
-  "Will reduce the contents of a card to n characters and if it gets reduced add on ..."
-  [n s]
-  (s/join [(if (> (count s) n) (str (subs s 0 n) "...") s)]))
-
 (defn card-modal-component [card]
-  [:div {:class "ui container"} (:contents card)])
+  [:div {:key "show-card-modal" :class "container memoria-modal memoria-card"}
+   [:div {:class "ui header"}
+    [:h2 (:title card)]
+    [:span {:class "tags"} (:tags card)]]
+   [:div {:class "ui divider"}]
+   [:div {:class "card-contents"} (:contents card)]])
 
 (defn card-component [card]
   (let [on-title-clicked (fn [event]
@@ -29,7 +30,7 @@
                  :on-click on-title-clicked} (:title card)]]
        [:span {:class "tags"} (:tags card)]]
       [:div {:class "ui divider"}]
-      [:div {:class "card-contents"} (max-length 400 (:contents card))]]]))
+      [:div {:class "card-contents"} (formatting/truncate 400 (:contents card))]]]))
 
 (defn cards-list-component [cards]
   [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
