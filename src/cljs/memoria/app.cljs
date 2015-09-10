@@ -62,7 +62,7 @@
     [cards-list-component @cards]]])
 
 (defn render-index-page []
-  (r/render [index-page-component] (.-body js/document)))
+  (r/render [index-page-component] (.getElementById js/document "memoria-container")))
 
 (defn load-latest-cards []
   (fetch-cards "/cards")
