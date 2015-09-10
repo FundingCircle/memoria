@@ -10,6 +10,9 @@
   [n s]
   (s/join [(if (> (count s) n) (str (subs s 0 n) "...") s)]))
 
+(defn bind-input [input-atom]
+  #(reset! input-atom (-> %1 .-target .-value)))
+
 (def jquery (js* "$"))
 
 (defn error-handler [{:keys [status status-text]}]
@@ -62,44 +65,43 @@
 
 (defn add-card-modal []
   (let [title (r/atom nil)
-        content (r/atom nil)
+        contents (r/atom nil)
         tags (r/atom nil)
         on-add-card-submit (fn [event params]
-                           (.preventDefault event)
-                           (create-card {:title title
-                                         :content content
-                                         :tags tags}))]
+                             (.preventDefault event)
+                             (create-card {:title @title
+                                           :contents @contents
+                                           :tags @tags}))]
 
-    [:div {:class "ui segment modal" :key "add-card-modal"}
+    [:div {:key "add-card-modal"}
      [:h2 {:class "ui center aligned icon header"}
       [:i {:class "circular plus purple icon"}]
       [:content {:class "content"} "Add card"]]
 
-    [:form {:class "ui small form"}
-     [:div {:class "required field"}
-      [:label "Title"]
-      [:input {:type "text"}]]
-     [:div {:class "required field"}
-      [:label "Content"]
-      [:textarea {:rows "5"}]]
-     [:div {:class "field"}
-      [:label "Tags"]
-      [:input {:type "text"}]]
-     [:button {:class "ui center aligned button" :type "submit"} "Submit"]]]))
+     [:form {:class "ui small form" :action "#" :on-submit on-add-card-submit}
+      [:div {:class "required field"}
+       [:label "Title"]
+       [:input {:type "text" :on-change (bind-input title)}]]
+      [:div {:class "required field"}
+       [:label "Content"]
+       [:textarea {:rows "5" :on-change (bind-input contents)}]]
+      [:div {:class "field"}
+       [:label "Tags"]
+       [:input {:type "text" :on-change (bind-input tags)}]]
+      [:button {:class "ui center aligned button" :type "submit"} "Submit"]]]))
 
 
-(defn add-card-button [show-modal]
-  [:button {:class "circular ui icon button massive" :key "add-card-button" :on-click show-modal}
-   [:i {:class "icon plus purple"}]])
+(defn add-card-button []
+  (let [on-click (fn []
+                   (r/render [add-card-modal] (.getElementById js/document "modal"))
+                   (-> (jquery "#modal")
+                            (.modal "show")))]
+    [:button {:class "circular ui icon button massive" :key "add-card-button" :on-click on-click}
+     [:i {:class "icon plus purple"}]]))
 
 (defn add-card-component []
-  (let [on-click (fn [] (-> (jquery ".ui.modal")
-                            (.modal "show")))]
-
   [:div {:class "add-card" :key "add-card-component"}
-   [add-card-button on-click]
-   [add-card-modal]]))
-
+   [add-card-button]])
 
 (defn cards-list-component [cards]
   [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
@@ -119,7 +121,7 @@
        [:input {:class "prompt"
                 :type "text"
                 :placeholder "Search for cards..."
-                :on-change #(reset! search-term (-> %1 .-target .-value))}]]]]))
+                :on-change (bind-input search-term)}]]]]))
 
 (defn index-page-component []
   [:div
