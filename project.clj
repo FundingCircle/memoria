@@ -1,8 +1,7 @@
 (defproject memoria "0.1.0-SNAPSHOT"
   :description "A webapp to save things that you would otherwise forget."
   :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :license {:name "Commercial, not for redistribution"}
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.48"]

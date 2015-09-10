@@ -64,5 +64,3 @@ Follow the instructions in the [SemanticUI documentation](http://semantic-ui.com
 ## License
 
 Copyright © 2015 Funding Circle Ltd.
-
-Distributed under the BSD 3-Clause License.
