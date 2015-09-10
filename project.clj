@@ -24,8 +24,8 @@
 
   :plugins [[lein-ring "0.9.6"]
             [lein-environ "1.0.0"]
-            [lein-cljsbuild "1.1.0"]
-            [lein-figwheel "0.3.9"]]
+            [lein-figwheel "0.3.9"]
+            [lein-cljsbuild  "1.1.0"]]
 
   :clean-targets [:target-path "resources/public/js/out"]
   :source-paths ["src/clj" "src/cljs"]
@@ -40,13 +40,22 @@
                                   [org.clojure/tools.nrepl "0.2.10"]]}}
 
   :cljsbuild {:builds [{:id "dev"
-                        :source-paths ["src/cljs/"]
-                        :figwheel true
+                        :source-paths ["src/cljs/" "test"]
+                        :figwheel {:on-jsload "memoria.test/run"}
                         :compiler {:output-to "resources/public/js/memoria.js"
                                    :output-dir "resources/public/js/out"
                                    :main "memoria.app"
                                    :asset-path "js/out"
-                                   :optimizations :none}}]}
+                                   :optimizations :none}}
+
+                       {:id "test"
+                        :source-paths ["src/cljs/" "test"]
+                        :compiler {:output-to "resources/test/compiled.js"
+                                   :optimizations :whitespace
+                                   :pretty-print true}}]
+              :test-commands {"test" ["phantomjs"
+                                      "resources/test/test.js"
+                                      "resources/test/test.html"]}}
 
   :figwheel {:css-dirs ["resources/public/css"]}
 

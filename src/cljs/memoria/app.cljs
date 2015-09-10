@@ -62,8 +62,7 @@
   (fetch-cards "/cards")
   (render-index-page))
 
-(defn init []
+(defn ^:export init []
   (render-index-page)
   (load-latest-cards))
 
-(init)
