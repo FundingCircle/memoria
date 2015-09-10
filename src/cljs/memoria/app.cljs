@@ -23,7 +23,7 @@
 
 (defn card-component [card]
   [:div {:class "eight wide column" :key (:id card)}
-   [:div {:class "memoria-card ui container raised padded segment blue"}
+   [:div {:class "memoria-card ui container raised padded segment purple"}
     [:div {:class "ui header"}
      [:h2 [:a {:href "#"} (:title card)]]]
     [:div {:class "ui divider"}]
@@ -48,9 +48,10 @@
                 :on-change #(reset! search-term (-> %1 .-target .-value))}]]]]))
 
 (defn index-page-component []
-  [:div {:class "ui container main-content" :key "index-page-component"}
-   [search-box-component]
-   [cards-list-component @cards]])
+  [:div {:class "banner"}
+   [:div {:class "ui container main-content" :key "index-page-component"}
+    [search-box-component]
+    [cards-list-component @cards]]])
 
 (defn render-index-page []
   (r/render [index-page-component] (.-body js/document)))

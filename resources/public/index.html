@@ -7,29 +7,6 @@
     <title>Memoria</title>
   </head>
   <body>
-    <div class="banner">
-     <div class="banner-content">
-        Welcome to Memoria!
-      </div>
-    </div>
-    <div class="ui container main-content">
-      <div class="ui search search-box grid">
-        <div class="ui input search-input">
-          <input class="prompt" type="text" placeholder="Search for cards..."/>
-        </div>
-      </div>
-      <div class="ui grid sixteen container">
-        {% for card in cards %}
-        <div class="eight wide column">
-          <div class="memoria-card ui container raised padded segment purple">
-            <h2 class="ui card-header"><a href="#">{{card.title}}</a></h2>
-            <div class="ui divider"></div>
-            <div class="card-contents">{{card.contents|truncate}}</div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
     <script src="js/jquery.min.js"></script>
     <script src="semantic-ui/semantic.min.js"></script>
     <script src="js/memoria.js"></script>
