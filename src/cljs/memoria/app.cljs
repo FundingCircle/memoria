@@ -1,6 +1,12 @@
 (ns memoria.app
   (:require [reagent.core :as r]
-            [ajax.core :as a]))
+            [ajax.core :as a]
+            [clojure.string :as s]))
+
+(defn- max-length
+  "Will reduce the contents of a card to n characters and if it gets reduced add on ..."
+  [n s]
+  (s/join [(apply str (take n s)) (if (>= (count s) n) "...")]))
 
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console
@@ -28,7 +34,7 @@
      [:h2 [:a {:href "#"} (:title card)]]
      [:span {:class "tags"} (:tags card)]]
     [:div {:class "ui divider"}]
-    [:div {:class "card-contents"} (:contents card)]]])
+    [:div {:class "card-contents"} (max-length 400 (:contents card))]]])
 
 (defn cards-list-component [cards]
   [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
