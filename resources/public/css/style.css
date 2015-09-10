@@ -2,10 +2,13 @@
   padding-top: 2%;
 }
 
-
 /*-----------------------------
   Modal
 -----------------------------*/
+
+.memoria-modal {
+  padding: 2em;
+}
 
 .add-card .button {
   position: fixed;
