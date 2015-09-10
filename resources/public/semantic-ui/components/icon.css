@@ -324,14 +324,14 @@ i.inverted.circular.violet.icon {
 
 /* Purple */
 i.purple.icon {
-  color: #a333c8 !important;
+  color: #952d72 !important;
 }
 i.inverted.purple.icon {
   color: #dc73ff !important;
 }
 i.inverted.bordered.purple.icon,
 i.inverted.circular.purple.icon {
-  background-color: #a333c8 !important;
+  background-color: #952d72 !important;
   color: #ffffff !important;
 }
 

@@ -660,10 +660,10 @@
 
 /* Purple */
 .ui.purple.table {
-  border-top: 0.2em solid #a333c8;
+  border-top: 0.2em solid #952d72;
 }
 .ui.inverted.purple.table {
-  background-color: #a333c8 !important;
+  background-color: #952d72 !important;
   color: #ffffff !important;
 }
 
