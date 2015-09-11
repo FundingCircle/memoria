@@ -13,6 +13,18 @@
   font-size: 14px;
 }
 
+.edit-card .button {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+}
+
+.edit-card.button {
+  position: fixed;
+  right: 20px;
+  top: 26px;
+}
+
 .add-card .button {
   position: fixed;
   right: 20px;
