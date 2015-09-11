@@ -26,13 +26,12 @@
   (let [stripped-contents (formatting/strip-images (:contents card))
         on-title-clicked (fn [event]
                            (let [card-id (-> event .-target jquery (.data "id"))
-                                 url (str "/cards/" card-id)
-                                 card (do-get url (fn [response]
-                                                    (r/render [card-modal-component response] (.getElementById js/document "modal"))
-                                                    (r/render [markdown-component (:contents card)] (.getElementById js/document "markdown-content"))))]
-
-                             (-> (jquery "#modal")
-                                 (.modal "show"))))]
+                                 url (str "/cards/" card-id)]
+                             (do-get url (fn [response]
+                                           (r/render [card-modal-component response] (.getElementById js/document "modal"))
+                                           (r/render [markdown-component (:contents card)] (.getElementById js/document "markdown-content"))
+                                           (-> (jquery "#modal")
+                                               (.modal "show"))))))]
 
     [:div {:class "eight wide column memoria-cards" :key (:id card)}
      [:div {:class "memoria-card ui container raised padded segment purple"}
