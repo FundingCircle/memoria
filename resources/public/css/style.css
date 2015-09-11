@@ -69,6 +69,10 @@
   margin-top: 0;
 }
 
+.memoria-card img {
+  max-width: 100%;
+}
+
 .search-box input[type="text"] {
   line-height: 2em;
   height: 70px;
