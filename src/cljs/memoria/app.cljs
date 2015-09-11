@@ -1,8 +1,9 @@
 (ns memoria.app
   (:require [reagent.core :as r]
             [ajax.core :as a]
+            [clojure.string :as s]
             [memoria.ajax :refer [do-get]]
-            [memoria.cards-list :refer [card-component cards-list-component]]
+            [memoria.cards-list :refer [load-latest-cards card-component cards-list-component]]
             [memoria.search-box :refer [search-box-component]]
             [memoria.add-card :refer [add-card-component]]))
 
@@ -21,7 +22,7 @@
 
 (defn index-page-component []
   [:div
-   [add-card-component]
+   [add-card-component cards]
    [banner-component]
    [:div {:class "ui container main-content" :key "index-page-component"}
     [search-box-component cards]
@@ -30,10 +31,7 @@
 (defn render-index-page []
   (r/render [index-page-component] (.getElementById js/document "memoria-container")))
 
-(defn load-latest-cards []
-  (do-get "/cards" #(reset! cards %1))
-  (render-index-page))
-
 (defn ^:export init []
-  (load-latest-cards))
+  (render-index-page)
+  (load-latest-cards cards))
 

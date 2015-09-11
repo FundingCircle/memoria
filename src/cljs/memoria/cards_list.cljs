@@ -6,6 +6,9 @@
 
 (def ^:private jquery (js* "$"))
 
+(defn load-latest-cards [cards-atom]
+  (do-get "/cards" #(reset! cards-atom %1)))
+
 (defn card-modal-component [card]
   [:div {:key "show-card-modal" :class "container memoria-modal memoria-card"}
    [:div {:class "ui header"}

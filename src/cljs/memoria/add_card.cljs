@@ -3,7 +3,7 @@
             [memoria.ajax :refer [do-get do-post]]
             [memoria.modal :as modal]
             [memoria.data-binding :refer [bind-input]]
-            [memoria.app :as app]))
+            [memoria.cards-list :refer [load-latest-cards]]))
 
 (def ^:private jquery (js* "$"))
 
@@ -16,26 +16,26 @@
   (reset! contents-atom nil)
   (reset! tags-atom nil))
 
-(defn- on-form-submit [event]
+(defn- on-form-submit [event cards-atom]
   (.preventDefault event)
   (let [params {:title @title-atom
                 :contents @contents-atom
                 :tags @tags-atom}]
     (do-post "/cards"
              (fn [resp]
-               (app/load-latest-cards)
+               (load-latest-cards cards-atom)
                (reset-inputs)
                (modal/close-modal))
              params)))
 
-(defn add-card-modal []
+(defn add-card-modal [cards-atom]
   [:div {:key "add-card-modal" :class "container memoria-modal"}
    [:h2 {:class "ui aligned header"} "Add new card"]
    [:div {:class "ui divider"}]
 
    [:form {:class "ui small form"
            :action "#"
-           :on-submit #(on-form-submit %1)}
+           :on-submit #(on-form-submit %1 cards-atom)}
     [:div {:class "required field"}
      [:label "Title"]
      [:input {:value @title-atom :type "text" :on-change (bind-input title-atom)}]]
@@ -50,14 +50,14 @@
               :placeholder "tags are separated by spaces or commas"}]]
     [:button {:class "ui center aligned button blue" :type "submit"} "Submit"]]])
 
-(defn add-card-button []
+(defn add-card-button [cards-atom]
   (let [on-click (fn []
-                   (r/render [add-card-modal] (.getElementById js/document "modal"))
+                   (r/render [add-card-modal cards-atom] (.getElementById js/document "modal"))
                    (modal/open-modal))]
     [:button {:class "circular ui icon button massive" :key "add-card-button" :on-click on-click}
      [:i {:class "icon plus purple"}]]))
 
-(defn add-card-component []
+(defn add-card-component [cards-atom]
   [:div {:class "add-card" :key "add-card-component"}
-   [add-card-button]])
+   [add-card-button cards-atom]])
 
