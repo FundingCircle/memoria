@@ -2,8 +2,7 @@
   (:require [reagent.core :as r]
             [memoria.data-binding :refer [bind-input]]
             [memoria.modal :as modal]
-            [memoria.cards-list :refer [load-latest-cards]]
-            [memoria.ajax :refer [do-get do-post]]))
+            [memoria.ajax :as ajax]))
 
 (def ^:private jquery (js* "$"))
 
@@ -22,9 +21,9 @@
   (let [params {:title @title-atom
                 :contents @contents-atom
                 :tags @tags-atom}]
-    (do-post (str "/cards/" (:id @card-atom))
+    (ajax/do-post (str "/cards/" (:id @card-atom))
              (fn [resp]
-               (load-latest-cards cards-atom)
+               (ajax/load-latest-cards #(reset! cards-atom %1))
                (modal/close-edit-modal))
              params)))
 
