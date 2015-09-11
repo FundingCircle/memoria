@@ -15,13 +15,21 @@
     [:h2 (:title card)]
     [:span {:class "tags"} (:tags card)]]
    [:div {:class "ui divider"}]
-   [:div {:class "card-contents"} (:contents card)]])
+   [:div#markdown-content {:class "card-contents"}]])
+
+(defn markdown-component [contents]
+  (fn [contents]
+    [:div {:dangerouslySetInnerHTML
+           {:__html (-> contents str js/marked)}}]))
 
 (defn card-component [card]
   (let [on-title-clicked (fn [event]
                            (let [card-id (-> event .-target jquery (.data "id"))
                                  url (str "/cards/" card-id)
-                                 card (do-get url #(r/render [card-modal-component %1] (.getElementById js/document "modal")))]
+                                 card (do-get url (fn [response]
+                                                    (r/render [card-modal-component response] (.getElementById js/document "modal"))
+                                                    (r/render [markdown-component (:contents card)] (.getElementById js/document "markdown-content"))))]
+
                              (-> (jquery "#modal")
                                  (.modal "show"))))]
 
@@ -33,7 +41,7 @@
                  :on-click on-title-clicked} (:title card)]]
        [:span {:class "tags"} (:tags card)]]
       [:div {:class "ui divider"}]
-      [:div {:class "card-contents"} (formatting/truncate 400 (:contents card))]]]))
+      [:div {:class "card-contents"} [markdown-component (formatting/truncate 400 (:contents card))]]]]))
 
 (defn cards-list-component [cards]
   [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
