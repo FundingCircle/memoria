@@ -1,9 +1,8 @@
 (ns memoria.add-card
   (:require [reagent.core :as r]
-            [memoria.ajax :refer [do-get do-post]]
+            [memoria.ajax :as ajax]
             [memoria.modal :as modal]
-            [memoria.data-binding :refer [bind-input]]
-            [memoria.cards-list :refer [load-latest-cards]]))
+            [memoria.data-binding :refer [bind-input]]))
 
 (def ^:private jquery (js* "$"))
 
@@ -21,9 +20,9 @@
   (let [params {:title @title-atom
                 :contents @contents-atom
                 :tags @tags-atom}]
-    (do-post "/cards"
+    (ajax/do-post "/cards"
              (fn [resp]
-               (load-latest-cards cards-atom)
+               (ajax/load-latest-cards #(reset! cards-atom %1))
                (reset-inputs)
                (modal/close-modal))
              params)))

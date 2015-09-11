@@ -25,3 +25,5 @@
                 :handler handler
                 :error-handler error-handler}))
 
+(defn load-latest-cards [handler]
+  (do-get "/cards" #(handler %1)))

@@ -7,9 +7,6 @@
 
 (def ^:private jquery (js* "$"))
 
-(defn load-latest-cards [cards-atom]
-  (do-get "/cards" #(reset! cards-atom %1)))
-
 (defn open-edit-modal [card]
   (edit-card/show-edit-modal card))
 

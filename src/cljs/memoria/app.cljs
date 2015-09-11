@@ -1,8 +1,8 @@
 (ns memoria.app
   (:require [reagent.core :as r]
             [ajax.core :as a]
-            [memoria.ajax :refer [do-get]]
-            [memoria.cards-list :refer [load-latest-cards card-component cards-list-component]]
+            [memoria.ajax :as ajax]
+            [memoria.cards-list :refer [card-component cards-list-component]]
             [memoria.search-box :refer [search-box-component]]
             [memoria.add-card :refer [add-card-component]]
             [memoria.edit-card :refer [edit-card-modal-component]]))
@@ -32,5 +32,5 @@
 (defn ^:export init []
   (render-index-page)
   (render-edit-modal)
-  (load-latest-cards cards))
+  (ajax/load-latest-cards #(reset! cards %1)))
 
