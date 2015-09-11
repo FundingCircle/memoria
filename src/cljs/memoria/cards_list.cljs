@@ -15,7 +15,9 @@
     [:h1 {:class "title"} (:title card)]
     [:span {:class "tags"} (:tags card)]]
    [:div {:class "ui divider"}]
-   [:div#markdown-content {:class "card-contents"}]])
+   [:div#markdown-content {:class "card-contents"}]
+    [:button {:class "circular ui icon button edit-card"}
+     [:i {:class "icon write"}]]])
 
 (defn markdown-component [contents]
   (fn [contents]
