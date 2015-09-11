@@ -4,7 +4,8 @@
             [memoria.ajax :refer [do-get]]
             [memoria.cards-list :refer [load-latest-cards card-component cards-list-component]]
             [memoria.search-box :refer [search-box-component]]
-            [memoria.add-card :refer [add-card-component]]))
+            [memoria.add-card :refer [add-card-component]]
+            [memoria.edit-card :refer [edit-card-modal-component]]))
 
 (def ^:private jquery (js* "$"))
 
@@ -25,7 +26,11 @@
 (defn render-index-page []
   (r/render [index-page-component] (.getElementById js/document "memoria-container")))
 
+(defn render-edit-modal []
+  (r/render [edit-card-modal-component cards] (.getElementById js/document "edit-modal")))
+
 (defn ^:export init []
   (render-index-page)
+  (render-edit-modal)
   (load-latest-cards cards))
 
