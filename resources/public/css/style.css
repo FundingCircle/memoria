@@ -7,7 +7,15 @@
 -----------------------------*/
 
 .memoria-modal {
+  border-top: 4px solid #952d72;
   padding: 2em;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+.memoria-modal h1{
+  color: #952d72;
+  margin-bottom: 0px;
 }
 
 .add-card .button {
@@ -32,8 +40,13 @@
   color: white;
 }
 
-.memoria-card {
-  height: 250px;
+.memoria-card .header {
+  margin-bottom: 0;
+  min-height: 56px;
+}
+
+.memoria-cards .memoria-card {
+  min-height: 250px;
 }
 
 .memoria-card .tags {
@@ -44,8 +57,8 @@
   margin-bottom: 0px;
 }
 
-.memoria-card .header {
-  margin-bottom: -2%;
+.memoria-card .divider {
+  margin-top: 0;
 }
 
 .search-box input[type="text"] {

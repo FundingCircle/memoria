@@ -12,7 +12,7 @@
 (defn card-modal-component [card]
   [:div {:key "show-card-modal" :class "container memoria-modal memoria-card"}
    [:div {:class "ui header"}
-    [:h2 (:title card)]
+    [:h1 (:title card)]
     [:span {:class "tags"} (:tags card)]]
    [:div {:class "ui divider"}]
    [:div#markdown-content {:class "card-contents"}]])
@@ -33,7 +33,7 @@
                              (-> (jquery "#modal")
                                  (.modal "show"))))]
 
-    [:div {:class "eight wide column" :key (:id card)}
+    [:div {:class "eight wide column memoria-cards" :key (:id card)}
      [:div {:class "memoria-card ui container raised padded segment purple"}
       [:div {:class "ui header"}
        [:h2 [:a {:href "#"
