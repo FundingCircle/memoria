@@ -16,11 +16,11 @@
 
 (defn index-page-component []
   [:div
-   [add-card-component cards]
    [banner-component]
    [:div {:class "ui container main-content" :key "index-page-component"}
     [search-box-component cards]
-    [cards-list-component @cards]]])
+    [cards-list-component @cards]
+    [add-card-component cards]]])
 
 (defn render-index-page []
   (r/render [index-page-component] (.getElementById js/document "memoria-container")))

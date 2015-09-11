@@ -54,7 +54,7 @@
   (let [on-click (fn []
                    (r/render [add-card-modal cards-atom] (.getElementById js/document "modal"))
                    (modal/open-modal))]
-    [:button {:class "circular ui icon button massive" :key "add-card-button" :on-click on-click}
+    [:button {:class "circular ui icon button big" :key "add-card-button" :on-click on-click}
      [:i {:class "icon plus purple"}]]))
 
 (defn add-card-component [cards-atom]
