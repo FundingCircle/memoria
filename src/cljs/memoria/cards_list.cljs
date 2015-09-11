@@ -2,12 +2,16 @@
   (:require [reagent.core :as r]
             [clojure.string :as s]
             [memoria.formatting :as formatting]
+            [memoria.edit-card :as edit-card]
             [memoria.ajax :refer [do-get]]))
 
 (def ^:private jquery (js* "$"))
 
 (defn load-latest-cards [cards-atom]
   (do-get "/cards" #(reset! cards-atom %1)))
+
+(defn open-edit-modal [card]
+  (edit-card/show-edit-modal card))
 
 (defn card-modal-component [card]
   [:div {:key "show-card-modal" :class "container memoria-modal memoria-card"}
@@ -16,7 +20,7 @@
     [:span {:class "tags"} (:tags card)]]
    [:div {:class "ui divider"}]
    [:div#markdown-content {:class "card-contents"}]
-    [:button {:class "circular ui icon button edit-card"}
+    [:button {:class "circular ui icon button edit-card" :on-click #(open-edit-modal card)}
      [:i {:class "icon write"}]]])
 
 (defn markdown-component [contents]

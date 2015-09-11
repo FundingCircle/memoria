@@ -58,7 +58,7 @@
 (deftest updating-a-card
   (with-redefs [cards/update-by-id (constantly (assoc a-card :title "New title"))]
     (let [attrs {:title "New title"}
-          response (cards-handler/cards-routes (mock/request :patch (str "/cards/" (:id a-card))))]
+          response (cards-handler/cards-routes (mock/request :post (str "/cards/" (:id a-card))))]
       (testing "Responds with 200"
         (is (= (:status response) 200)))
 

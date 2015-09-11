@@ -54,7 +54,7 @@
   (let [card (cards/insert *conn* {:title "This is a card" :contents "These are the contents"})]
     (testing "It succeeds"
       (let [attrs {:title "This is the new title" :contents "New contents"}
-            response (do-patch (str "/cards/" (:id card)) attrs)
+            response (do-post (str "/cards/" (:id card)) attrs)
             {:keys [status body headers]} response
             updated-card (cards/find-by-id *conn* (get body "id"))]
         (is (= status 200))
@@ -66,7 +66,7 @@
   (let [card (cards/insert *conn* {:title "This is a card" :contents "These are the contents"})]
     (testing "It fails"
       (let [attrs {:title nil :contents nil}
-            response (do-patch (str "/cards/" (:id card)) attrs)
+            response (do-post (str "/cards/" (:id card)) attrs)
             {:keys [status body headers]} response]
         (is (= status) 422)
         (is (nil? (get body "title")))
