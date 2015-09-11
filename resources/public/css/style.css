@@ -13,11 +13,6 @@
   font-size: 14px;
 }
 
-.memoria-modal h1{
-  color: #952d72;
-  margin-bottom: 0px;
-}
-
 .add-card .button {
   position: fixed;
   right: 20px;
@@ -53,8 +48,9 @@
   font-size: 0.7em;
 }
 
-.memoria-card h2 {
+.memoria-card .title {
   margin-bottom: 0px;
+  color: #952d72;
 }
 
 .memoria-card .divider {

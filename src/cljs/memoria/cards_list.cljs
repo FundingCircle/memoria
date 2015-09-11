@@ -12,7 +12,7 @@
 (defn card-modal-component [card]
   [:div {:key "show-card-modal" :class "container memoria-modal memoria-card"}
    [:div {:class "ui header"}
-    [:h1 (:title card)]
+    [:h1 {:class "title"} (:title card)]
     [:span {:class "tags"} (:tags card)]]
    [:div {:class "ui divider"}]
    [:div#markdown-content {:class "card-contents"}]])
@@ -36,9 +36,10 @@
     [:div {:class "eight wide column memoria-cards" :key (:id card)}
      [:div {:class "memoria-card ui container raised padded segment purple"}
       [:div {:class "ui header"}
-       [:h2 [:a {:href "#"
-                 :data-id (:id card)
-                 :on-click on-title-clicked} (:title card)]]
+       [:h2 {:class "title"}
+        [:a {:href "#"
+             :data-id (:id card)
+             :on-click on-title-clicked} (:title card)]]
        [:span {:class "tags"} (:tags card)]]
       [:div {:class "ui divider"}]
       [:div {:class "card-contents"} [markdown-component (formatting/truncate 400 (:contents card))]]]]))
