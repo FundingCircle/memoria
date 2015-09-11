@@ -73,6 +73,10 @@
   max-width: 100%;
 }
 
+.memoria-card .card-contents {
+  overflow: hidden;
+}
+
 .search-box input[type="text"] {
   line-height: 2em;
   height: 70px;
