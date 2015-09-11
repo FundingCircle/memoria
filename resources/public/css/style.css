@@ -82,3 +82,7 @@
 .search-input {
   width: 100%;
 }
+
+.ui input:focus, .ui textarea:focus {
+  border-color: #952d72 !important;
+}
