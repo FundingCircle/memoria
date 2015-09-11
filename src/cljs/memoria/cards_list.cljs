@@ -47,6 +47,6 @@
       [:div {:class "card-contents"} [markdown-component (formatting/truncate 400 stripped-contents)]]]]))
 
 (defn cards-list-component [cards]
-  [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
+  [:div#cards-container {:class "ui stackable sixteen grid container" :key "cards-list-container"}
    (for [card cards] [card-component card])])
 

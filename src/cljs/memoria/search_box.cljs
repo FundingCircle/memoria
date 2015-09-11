@@ -12,7 +12,7 @@
                                         {:q search-term}))]
 
     [:div {:class "ui search search-box grid" :key "search-box-component"}
-     [:form {:action "#" :on-submit #(on-search-submit %1 @search-term)}
+     [:form {:class "column" :action "#" :on-submit #(on-search-submit %1 @search-term)}
       [:div {:class "ui input search-input"}
        [:input {:class "prompt"
                 :type "text"
