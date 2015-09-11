@@ -23,7 +23,8 @@
            {:__html (-> contents str js/marked)}}]))
 
 (defn card-component [card]
-  (let [on-title-clicked (fn [event]
+  (let [stripped-contents (formatting/strip-images (:contents card))
+        on-title-clicked (fn [event]
                            (let [card-id (-> event .-target jquery (.data "id"))
                                  url (str "/cards/" card-id)
                                  card (do-get url (fn [response]
@@ -42,7 +43,7 @@
              :on-click on-title-clicked} (:title card)]]
        [:span {:class "tags"} (:tags card)]]
       [:div {:class "ui divider"}]
-      [:div {:class "card-contents"} [markdown-component (formatting/truncate 400 (:contents card))]]]]))
+      [:div {:class "card-contents"} [markdown-component (formatting/truncate 400 stripped-contents)]]]]))
 
 (defn cards-list-component [cards]
   [:div#cards-container {:class "ui grid sixteen container" :key "cards-list-container"}
