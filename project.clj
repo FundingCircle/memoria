@@ -6,6 +6,7 @@
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.48"]
+                 [ring-gatekeeper "0.2.0"]
                  [reagent "0.5.1-rc3"]
                  [cljs-ajax "0.3.14"]
                  [yesql "0.5.0-rc3"]
@@ -36,7 +37,6 @@
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[ring/ring-mock "0.2.0"]
                                   [com.cemerick/piggieback "0.2.1"]
-                                  [com.cemerick/austin "0.1.6"]
                                   [org.clojure/tools.nrepl "0.2.10"]]}}
 
   :cljsbuild {:builds [{:id "dev"
@@ -57,6 +57,7 @@
                                       "resources/test/test.js"
                                       "resources/test/test.html"]}}
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  :figwheel {:css-dirs ["resources/public/css"]
+             :nrepl-port 7888}
 
   :ring  {:handler memoria.core/app})

@@ -3,6 +3,8 @@
             [compojure.route :as route]
             [ring.middleware.params :refer  [wrap-params]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
+            [ring-gatekeeper.authenticators.auth0 :as auth0]
+            [ring-gatekeeper.core :as auth]
             [taoensso.timbre :as timbre]
             [selmer.parser :as selmer]
             [memoria.db :as db]
@@ -10,6 +12,16 @@
             [memoria.entities.cards :as cards]))
 
 (selmer.parser/set-resource-path! (clojure.java.io/resource "public"))
+
+(def ^:private auth0-authenticator (auth0/new-authenticator {:can-handle-request-fn (constantly true)
+                                                             :client-id (System/getenv "MEMORIA_AUTH0_CLIENT_ID")
+                                                             :client-secret (System/getenv "MEMORIA_AUTH0_CLIENT_SECRET")
+                                                             :subdomain (System/getenv "MEMORIA_AUTH0_SUBDOMAIN")}))
+
+(defn wrap-request-auth
+  "Checks if the user is allowed to access the application using Auth0"
+  [app]
+  (auth/authenticate app [auth0-authenticator]))
 
 (defn wrap-request-logging
   "Logs the data received in the request and the data generated in the response. Useful
@@ -45,6 +57,7 @@
 
 (def app
   (-> app-routes
+      wrap-request-auth
       wrap-params
       wrap-json-body
       wrap-json-response
