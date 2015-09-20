@@ -10,11 +10,18 @@
 (defn open-edit-modal [card]
   (edit-card/show-edit-modal card))
 
+(defn created-at-component [card]
+  (when (some? (:created_at card))
+    [:span {:class "created-at"} (-> card
+                                     :created_at
+                                     formatting/format-datetime-string)]))
+
 (defn card-modal-component [card]
   [:div {:key "show-card-modal" :class "container memoria-modal memoria-card"}
    [:div {:class "ui header"}
     [:h1 {:class "title"} (:title card)]
     [:span {:class "tags"} (:tags card)]]
+   [created-at-component card]
    [:div {:class "ui divider"}]
    [:div#markdown-content {:class "card-contents"}]
     [:button {:class "circular ui icon button edit-card" :on-click #(open-edit-modal card)}
@@ -43,7 +50,8 @@
         [:a {:href "#"
              :data-id (:id card)
              :on-click on-title-clicked} (:title card)]]
-       [:span {:class "tags"} (:tags card)]]
+       [:span {:class "tags"} (:tags card)]
+       [created-at-component card]]
       [:div {:class "ui divider"}]
       [:div {:class "card-contents"} [markdown-component (formatting/truncate 400 stripped-contents)]]]]))
 
