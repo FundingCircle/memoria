@@ -1,9 +1,13 @@
 (ns memoria.cards-list
   (:require [reagent.core :as r]
             [clojure.string :as s]
+            [reagent.core :as r]
             [memoria.formatting :as formatting]
+            [memoria.delete-card :as delete-card]
+            [memoria.cards-state :refer [cards-atom]]
+            [memoria.modal :as modal]
             [memoria.edit-card :as edit-card]
-            [memoria.ajax :refer [do-get]]))
+            [memoria.ajax :as ajax]))
 
 (def ^:private jquery (js* "$"))
 
@@ -17,6 +21,7 @@
                                      formatting/format-datetime-string)]))
 
 (defn card-modal-component [card]
+  (delete-card/reset-state)
   [:div {:key "show-card-modal" :class "container memoria-modal memoria-card"}
    [:div {:class "ui header"}
     [:h1 {:class "title"} (:title card)]
@@ -24,7 +29,8 @@
    [created-at-component card]
    [:div {:class "ui divider"}]
    [:div#markdown-content {:class "card-contents"}]
-    [:button {:class "circular ui icon button edit-card" :on-click #(open-edit-modal card)}
+   [delete-card/delete-button-component card]
+   [:button {:class "circular ui icon button edit-card" :title "Edit card" :on-click #(open-edit-modal card)}
      [:i {:class "icon write"}]]])
 
 (defn markdown-component [contents]
@@ -37,7 +43,7 @@
         on-title-clicked (fn [event]
                            (let [card-id (-> event .-target jquery (.data "id"))
                                  url (str "/cards/" card-id)]
-                             (do-get url (fn [response]
+                             (ajax/do-get url (fn [response]
                                            (r/render [card-modal-component response] (.getElementById js/document "modal"))
                                            (r/render [markdown-component (:contents card)] (.getElementById js/document "markdown-content"))
                                            (-> (jquery "#modal")
@@ -55,7 +61,7 @@
       [:div {:class "ui divider"}]
       [:div {:class "card-contents"} [markdown-component (formatting/truncate 400 stripped-contents)]]]]))
 
-(defn cards-list-component [cards]
+(defn cards-list-component []
   [:div#cards-container {:class "ui stackable sixteen grid container" :key "cards-list-container"}
-   (for [card cards] [card-component card])])
+   (for [card @cards-atom] [card-component card])])
 

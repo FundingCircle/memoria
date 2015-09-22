@@ -17,4 +17,4 @@
       (is (= (strip-images contents) contents)))))
 
 (deftest format-datetime-string-test
-  (is (= (format-datetime-string "2015-09-19T23:58:01.846Z") "19/09/2015 20:04:25")))
+  (is (= (format-datetime-string "2015-09-19T23:58:01.846Z") "19/09/2015 23:58:01")))

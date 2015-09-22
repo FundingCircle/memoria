@@ -34,6 +34,11 @@
   [db id]
   (first (find-card-by-id {:id id} {:connection db})))
 
+(defn find-deleted-by-id
+  "Finds a soft-deleted card by id"
+  [db id]
+  (first (find-deleted-card-by-id {:id id} {:connection db})))
+
 (defn latest
   "Returns latest cards"
   ([db] (latest db 1 10))
@@ -66,4 +71,4 @@
 (defn delete-by-id
   "Deletes the card having the given id"
   [db id]
-  (delete-card-by-id! {:id id} {:connection db}))
+  (soft-delete-card-by-id! {:id id} {:connection db}))

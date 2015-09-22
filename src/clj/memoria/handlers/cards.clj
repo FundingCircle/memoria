@@ -63,5 +63,5 @@
   (GET "/cards/:id" [id :as req] (show id))
   (POST "/cards" {body :body :as req} (create body))
   (POST "/cards/:id" {body :body {id :id} :params} (update-card id body))
-  (DELETE "/cards/:id" [id :as req] (delete-card id))
+  (POST "/cards/:id/delete" [id :as req] (delete-card id))
   (route/not-found {:status 404 :body {}}))

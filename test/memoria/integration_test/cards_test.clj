@@ -75,7 +75,7 @@
 (deftest deleting-a-card
   (let [card (cards/insert *conn* {:title "This is a card" :contents "These are the contents"})]
     (testing "It succeeds"
-      (let [response (do-delete (str "/cards/" (:id card)))
+      (let [response (do-post (str "/cards/" (:id card) "/delete"))
             {:keys [status body headers]} response
             reloaded-card (cards/find-by-id *conn* (:id card))]
         (is (= status 200))

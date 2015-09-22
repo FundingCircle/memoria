@@ -34,6 +34,11 @@
     (is (= (count (cards/latest *conn*))
            10)))
 
+  (testing "Does not return soft-deleted cards"
+    (let [card (cards/insert *conn* card-attributes)
+          _ (cards/delete-by-id *conn* (:id card))]
+      (is (not (some #{(:id card)} (map :id (cards/latest *conn*)))))))
+
   (testing "Returns specified number of cards"
     (dotimes [n 3] (cards/insert *conn* card-attributes))
     (is (= (map #(:title %1) (cards/latest *conn* 1 2))
@@ -114,9 +119,10 @@
 
 (deftest delete-cards
   (let [card (cards/insert *conn* card-attributes)]
-    (testing "Deletes the card having the given id"
+    (testing "Marks the card as deleted"
       (cards/delete-by-id *conn* (:id card))
-      (is (nil? (cards/find-by-id *conn* (:id card)))))))
+      (is (nil? (cards/find-by-id *conn* (:id card))))
+      (is (some? (cards/find-deleted-by-id *conn* (:id card)))))))
 
 (deftest search-cards-test
   (let [c1 (cards/insert *conn* {:tags "this-is-a-tag" :title "Clojure is a cool programming language", :contents "Any contents"})
@@ -136,3 +142,9 @@
 
     (testing "can search with multiple terms"
       (is (= (map :id (cards/search *conn* "programming languages")) [(:id c5) (:id c1)])))))
+
+(deftest search-deleted-cards
+  (let [c (cards/insert *conn* card-attributes)]
+    (testing "does not return deleted cards"
+      (cards/delete-by-id *conn* (:id c)))
+    (is (empty? (cards/search *conn* (:title c))))))
