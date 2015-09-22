@@ -1,9 +1,10 @@
 (ns memoria.search-box
   (:require [reagent.core :as r]
+            [memoria.cards-state :refer [cards-atom]]
             [memoria.ajax :refer [do-get]]
             [memoria.data-binding :refer [bind-input]]))
 
-(defn search-box-component [cards-atom]
+(defn search-box-component []
   (let [search-term (r/atom nil)
         on-search-submit (fn [event search-term]
                            (.preventDefault event)

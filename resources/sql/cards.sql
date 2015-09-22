@@ -31,6 +31,3 @@ INSERT INTO cards (title, tags, contents, ancestor_id, created_at) VALUES (:titl
 -- Marks a card as soft deleted
 UPDATE cards SET deleted = 't' WHERE id = :id;
 
--- name: delete-card-by-id!
--- Deletes the card that has the given id
-DELETE FROM cards WHERE id = :id;

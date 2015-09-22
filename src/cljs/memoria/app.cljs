@@ -1,6 +1,7 @@
 (ns memoria.app
   (:require [reagent.core :as r]
             [ajax.core :as a]
+            [memoria.cards-state :refer [cards-atom]]
             [memoria.ajax :as ajax]
             [memoria.cards-list :refer [card-component cards-list-component]]
             [memoria.search-box :refer [search-box-component]]
@@ -8,8 +9,6 @@
             [memoria.edit-card :refer [edit-card-modal-component]]))
 
 (def ^:private jquery (js* "$"))
-
-(defonce cards (r/atom []))
 
 (defn banner-component []
   [:div {:class "banner" :key "banner"}
@@ -19,9 +18,9 @@
   [:div
    [banner-component]
    [:div {:class "ui container main-content" :key "index-page-component"}
-    [search-box-component cards]
-    [cards-list-component @cards]
-    [add-card-component cards]]])
+    [search-box-component]
+    [cards-list-component]
+    [add-card-component]]])
 
 (defn render-index-page []
   (r/render [index-page-component] (.getElementById js/document "memoria-container")))
@@ -32,5 +31,5 @@
 (defn ^:export init []
   (render-index-page)
   (render-edit-modal)
-  (ajax/load-latest-cards #(reset! cards %1)))
+  (ajax/load-latest-cards #(reset! cards-atom %1)))
 

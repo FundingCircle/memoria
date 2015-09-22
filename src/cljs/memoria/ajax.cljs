@@ -16,14 +16,16 @@
                               :handler handler
                               :error-handler error-handler})))
 
-(defn do-post [path handler params]
-  (a/POST path {:headers {"Content-Type" "application/json"}
-                :params params
-                :format :json
-                :response-format :json
-                :keywords? true
-                :handler handler
-                :error-handler error-handler}))
+(defn do-post
+  ([path handler params]
+   (a/POST path {:headers {"Content-Type" "application/json"}
+                 :params params
+                 :format :json
+                 :response-format :json
+                 :keywords? true
+                 :handler handler
+                 :error-handler error-handler}))
+  ([path handler] (do-post path handler {})))
 
 (defn load-latest-cards [handler]
   (do-get "/cards" #(handler %1)))

@@ -13,6 +13,12 @@
   font-size: 14px;
 }
 
+.delete-button-component {
+  position: fixed;
+  right: 60px;
+  top: 26px;
+}
+
 .edit-card .button {
   position: fixed;
   right: 20px;
@@ -22,6 +28,12 @@
 .edit-card.button {
   position: fixed;
   right: 20px;
+  top: 26px;
+}
+
+.delete-card.button {
+  position: fixed;
+  right: 60px;
   top: 26px;
 }
 

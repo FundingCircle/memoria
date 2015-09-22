@@ -64,3 +64,12 @@
 
       (testing "Returns the updated card"
         (is (= (get-in response [:body :title]) "New title"))))))
+
+(deftest deleting-a-card
+  (with-redefs [cards/delete-by-id (constantly 1)]
+    (let [response (cards-handler/cards-routes (mock/request :post "/cards/123/delete"))]
+      (testing "Responds with 200"
+        (is (= (:status response) 200)))
+
+      (testing "Returns an empty body"
+        (is (= (:body response) {}))))))

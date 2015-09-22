@@ -1,5 +1,6 @@
 (ns memoria.add-card
   (:require [reagent.core :as r]
+            [memoria.cards-state :refer [cards-atom]]
             [memoria.ajax :as ajax]
             [memoria.modal :as modal]
             [memoria.data-binding :refer [bind-input]]))
@@ -15,7 +16,7 @@
   (reset! contents-atom nil)
   (reset! tags-atom nil))
 
-(defn- on-form-submit [event cards-atom]
+(defn- on-form-submit [event]
   (.preventDefault event)
   (let [params {:title @title-atom
                 :contents @contents-atom
@@ -27,7 +28,7 @@
                (modal/close-modal))
              params)))
 
-(defn add-card-modal [cards-atom]
+(defn add-card-modal []
   [:div {:key "add-card-modal" :class "container memoria-modal"}
    [:h2 {:class "ui aligned header"} "Add new card"]
    [:div {:class "ui divider"}]
@@ -49,14 +50,14 @@
               :placeholder "tags are separated by spaces or commas"}]]
     [:button {:class "ui center aligned button blue" :type "submit"} "Submit"]]])
 
-(defn add-card-button [cards-atom]
+(defn add-card-button []
   (let [on-click (fn []
-                   (r/render [add-card-modal cards-atom] (.getElementById js/document "modal"))
+                   (r/render [add-card-modal] (.getElementById js/document "modal"))
                    (modal/open-modal))]
     [:button {:class "circular ui icon button big" :key "add-card-button" :on-click on-click}
      [:i {:class "icon plus purple"}]]))
 
-(defn add-card-component [cards-atom]
+(defn add-card-component []
   [:div {:class "add-card" :key "add-card-component"}
-   [add-card-button cards-atom]])
+   [add-card-button]])
 

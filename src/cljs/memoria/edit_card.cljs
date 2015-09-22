@@ -1,5 +1,6 @@
 (ns memoria.edit-card
   (:require [reagent.core :as r]
+            [memoria.cards-state :refer [cards-atom]]
             [memoria.data-binding :refer [bind-input]]
             [memoria.modal :as modal]
             [memoria.ajax :as ajax]))
@@ -16,7 +17,7 @@
   (reset! contents-atom (:contents card))
   (reset! tags-atom (:tags card)))
 
-(defn- on-form-submit [event cards-atom]
+(defn- on-form-submit [event]
   (.preventDefault event)
   (let [params {:title @title-atom
                 :contents @contents-atom
@@ -27,14 +28,14 @@
                (modal/close-edit-modal))
              params)))
 
-(defn edit-card-modal-component [cards-atom]
+(defn edit-card-modal-component []
   [:div {:key "add-card-modal" :class "container memoria-modal"}
    [:h2 {:class "ui aligned header"} (str "Editing card " @title-atom)]
    [:div {:class "ui divider"}]
 
    [:form {:class "ui small form"
            :action "#"
-           :on-submit #(on-form-submit %1 cards-atom)}
+           :on-submit #(on-form-submit %1)}
     [:div {:class "required field"}
      [:label "Title"]
      [:input {:value @title-atom :type "text" :on-change (bind-input title-atom)}]]
