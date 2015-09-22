@@ -47,6 +47,12 @@
   color: white;
 }
 
+.memoria-card .created-at {
+  font-size: 0.6em;
+  color: grey;
+  float: right;
+}
+
 .memoria-card .header {
   margin-bottom: 0;
   min-height: 56px;

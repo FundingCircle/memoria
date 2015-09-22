@@ -1,6 +1,7 @@
 (ns memoria.formatting-test
   (:require [cljs.test :refer-macros [deftest is testing]]
-            [memoria.formatting :refer [strip-images]]))
+            [cljs-time.core :as t]
+            [memoria.formatting :refer [strip-images format-datetime-string]]))
 
 (deftest strip-images-test
   (testing "When the content has an image tag"
@@ -14,3 +15,6 @@
   (testing "When the content does not have an image tag"
     (let [contents "Whatever\n\nMore content"]
       (is (= (strip-images contents) contents)))))
+
+(deftest format-datetime-string-test
+  (is (= (format-datetime-string "2015-09-19T23:58:01.846Z") "19/09/2015 20:04:25")))

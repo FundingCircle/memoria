@@ -7,4 +7,4 @@
 
 (defn ^:export run
   []
-  (run-all-tests #"memoria.*-test"))
+  (run-all-tests #"memoria.*test"))

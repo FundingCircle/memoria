@@ -1,5 +1,7 @@
 (ns memoria.entities.cards-test
-  (:require [memoria.entities.cards :as cards]
+  (:require [clj-time.core :as t]
+            [clj-time.coerce :as c]
+            [memoria.entities.cards :as cards]
             [memoria.db :refer [*conn*]]
             [memoria.support.db-test-helpers :refer [setup-database-rollbacks]]
             [clojure.test :refer :all]))
@@ -45,7 +47,7 @@
       (is (= (map #(:title %1) (cards/latest *conn* 1 3))
              ["Another title" "New title" "Old title"])))))
 
-(deftest cards-insertion
+(deftest cards-insertion-test
   (testing "Inserting a new card increases the total cards count"
     (let [initial-count (cards/cnt *conn*)]
       (cards/insert *conn* card-attributes)
@@ -59,6 +61,12 @@
   (testing "The inserted card has the correct contents"
     (let [card (cards/insert *conn* card-attributes)]
       (is (= (:contents card) "These are the card's contents"))))
+
+  (testing "The inserted card has the correct creation time"
+    (let [now (t/now)]
+      (with-redefs [clj-time.core/now (fn [] now)]
+        (let [card (cards/insert *conn* card-attributes)]
+          (is (= (:created_at card) now))))))
 
   (testing "Fails if the attributes are invalid"
     (let [card (cards/insert *conn* {})]
@@ -91,6 +99,13 @@
     (let [card (cards/insert *conn* card-attributes)
           updated-card (cards/update-by-id *conn* (:id card) {:contents "New contents"})]
       (is (= (:title updated-card) "A Card"))))
+
+  (testing "It has the correct cretion time"
+    (let [card (cards/insert *conn* card-attributes)
+          now (t/now)]
+      (with-redefs [clj-time.core/now (fn [] now)]
+        (let [updated-card (cards/update-by-id *conn* (:id card) {:title "New title"})]
+          (is (= (:created_at updated-card) now))))))
 
   (testing "Fails if the attributes are invalid"
     (let [card (cards/insert *conn* card-attributes)

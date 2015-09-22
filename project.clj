@@ -10,6 +10,8 @@
                  [cljs-ajax "0.3.14"]
                  [yesql "0.5.0-rc3"]
                  [hikari-cp "1.2.4"]
+                 [clj-time "0.11.0"]
+                 [com.andrewmcveigh/cljs-time "0.3.13"]
                  [ragtime "0.5.0"]
                  [org.postgresql/postgresql "9.4-1201-jdbc41"]
                  [compojure "1.4.0"]

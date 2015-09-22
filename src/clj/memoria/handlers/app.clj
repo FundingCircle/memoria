@@ -6,6 +6,7 @@
             [taoensso.timbre :as timbre]
             [selmer.parser :as selmer]
             [memoria.db :as db]
+            [memoria.handlers.json-conversions]
             [memoria.handlers.cards :as cards-handler]
             [memoria.entities.cards :as cards]))
 

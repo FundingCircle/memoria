@@ -1,10 +1,16 @@
 (ns memoria.entities.cards
   (:require [clojure.string :as s]
+            [clj-time.core :as t]
+            [clj-time.jdbc]
             [yesql.core :refer [defqueries]]
             [bouncer.core :as b]
             [bouncer.validators :as v]))
 
 (defqueries "sql/cards.sql")
+
+(defn- run-insertion [db f attrs]
+  (-> (f (assoc attrs :created_at (t/now)) {:connection db})
+      (dissoc :tsv)))
 
 (defn validate [card]
   (let [errors (first (b/validate card
@@ -45,7 +51,7 @@
   [db {:keys [title contents tags]}]
   (let [attrs (validate {:title title :contents contents :tags tags})]
     (if (valid? attrs)
-      (dissoc (insert-card<! attrs {:connection db}) :tsv)
+      (run-insertion db insert-card<! attrs)
       attrs)))
 
 (defn update-by-id
@@ -54,7 +60,7 @@
   (let [c (find-by-id db id)
         attrs (validate (merge c attrs))]
     (if (valid? attrs)
-       (dissoc (insert-card-with-ancestor<! attrs {:connection db}) :tsv)
+      (run-insertion db insert-card-with-ancestor<! attrs)
        attrs)))
 
 (defn delete-by-id
