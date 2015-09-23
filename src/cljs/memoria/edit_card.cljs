@@ -28,6 +28,11 @@
                (modal/close-edit-modal))
              params)))
 
+(defn- cancel-edition [event]
+  (.preventDefault event)
+  (modal/close-edit-modal)
+  (modal/open-modal))
+
 (defn edit-card-modal-component []
   [:div {:key "add-card-modal" :class "container memoria-modal"}
    [:h2 {:class "ui aligned header"} (str "Editing card " @title-atom)]
@@ -48,6 +53,7 @@
               :value @tags-atom
               :on-change (bind-input tags-atom)
               :placeholder "tags are separated by spaces or commas"}]]
+    [:button {:class "ui center aligned button" :on-click cancel-edition} "Cancel"]
     [:button {:class "ui center aligned button blue" :type "submit"} "Submit"]]])
 
 (defn show-edit-modal [card]
