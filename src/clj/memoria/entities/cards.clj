@@ -30,14 +30,11 @@
   (:count (first (count-cards {} {:connection db}))))
 
 (defn find-by-id
-  "Finds a card with the given id"
-  [db id]
-  (first (find-card-by-id {:id id} {:connection db})))
-
-(defn find-deleted-by-id
-  "Finds a soft-deleted card by id"
-  [db id]
-  (first (find-deleted-card-by-id {:id id} {:connection db})))
+  "Finds a card with the given id. Accepts an option to force the search
+  to consider soft-deleted cards."
+  ([db id] (find-by-id db id false))
+  ([db id search-deleted]
+   (first (find-card-by-id {:id id :deleted search-deleted} {:connection db}))))
 
 (defn latest
   "Returns latest cards"
@@ -72,3 +69,4 @@
   "Deletes the card having the given id"
   [db id]
   (soft-delete-card-by-id! {:id id} {:connection db}))
+

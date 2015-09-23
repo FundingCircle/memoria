@@ -25,8 +25,12 @@
     (testing "When there is a card with the given id"
       (is (some? (cards/find-by-id *conn* (:id card)))))
 
+    (let [deleted-card (cards/insert *conn* card-attributes)
+          _ (cards/delete-by-id *conn* (:id deleted-card))]
+      (is (some? (cards/find-by-id *conn* (:id deleted-card) true))))
+
     (testing "When there is no card with the given id"
-      (is (nil? (cards/find-by-id *conn* (+ 1 (:id card))))))))
+      (is (nil? (cards/find-by-id *conn* (+ 10 (:id card))))))))
 
 (deftest listing-latest-cards
   (testing "Returns latest 10 cards when no number is specified"
@@ -122,7 +126,7 @@
     (testing "Marks the card as deleted"
       (cards/delete-by-id *conn* (:id card))
       (is (nil? (cards/find-by-id *conn* (:id card))))
-      (is (some? (cards/find-deleted-by-id *conn* (:id card)))))))
+      (is (some? (cards/find-by-id *conn* (:id card) true))))))
 
 (deftest search-cards-test
   (let [c1 (cards/insert *conn* {:tags "this-is-a-tag" :title "Clojure is a cool programming language", :contents "Any contents"})

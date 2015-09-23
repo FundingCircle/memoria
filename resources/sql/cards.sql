@@ -13,11 +13,7 @@ SELECT id, title, tags, contents, created_at, ts_rank(tsv, tsquery, 1), created_
 
 -- name: find-card-by-id
 -- Find a card by id
-SELECT id, title, tags, contents, ancestor_id, created_at FROM cards WHERE id = :id AND deleted = 'f' LIMIT 1;
-
--- name: find-deleted-card-by-id
--- Find a deleted card by id
-SELECT id, title, tags, contents, ancestor_id, created_at FROM cards WHERE id = :id AND deleted = 't' LIMIT 1;
+SELECT id, title, tags, contents, ancestor_id, created_at FROM cards WHERE id = :id AND deleted = :deleted LIMIT 1;
 
 -- name: insert-card<!
 -- Inserts a new record into the cards table
