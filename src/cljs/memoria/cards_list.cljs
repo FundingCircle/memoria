@@ -50,7 +50,7 @@
                                                (.modal "show"))))))]
 
     [:div {:class "eight wide column memoria-cards" :key (:id card)}
-     [:div {:class "memoria-card ui container raised padded segment purple"}
+     [:div {:class "memoria-card ui container raised padded segment purple" :id (str "card-thumbnail-" (:id card))}
       [:div {:class "ui header"}
        [:h2 {:class "title"}
         [:a {:href "#"

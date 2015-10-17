@@ -1,13 +1,13 @@
 (ns memoria.handlers.cards
-  (:require [memoria.entities.cards :as cards]
-            [memoria.handlers.basic :refer [not-found-response]]
-            [memoria.support.debugging :refer :all]
-            [memoria.db :as db]
+  (:require [clojure.string :as str]
+            [clojure.walk :refer [keywordize-keys]]
             [compojure.core :refer :all]
             [compojure.route :as route]
-            [clojure.walk :refer [keywordize-keys]]
+            [memoria.db :as db]
+            [memoria.entities.cards :as cards]
+            [memoria.handlers.basic :refer [not-found-response]]
+            [memoria.support.debugging :refer :all]
             [ring.middleware.json :refer [wrap-json-response]]))
-
 
 (defn- page-number [params]
   (Integer. (get params "page" 1)))
@@ -65,3 +65,4 @@
   (POST "/cards/:id" {body :body {id :id} :params} (update-card id body))
   (POST "/cards/:id/delete" [id :as req] (delete-card id))
   (route/not-found {:status 404 :body {}}))
+

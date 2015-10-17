@@ -22,7 +22,8 @@
                  [com.taoensso/timbre "4.0.2"]
                  [slingshot "0.12.2"]
                  [bouncer "0.3.3"]
-                 [selmer "0.9.1"]]
+                 [selmer "0.9.1"]
+                 [prismatic/dommy "1.1.0"]]
 
   :plugins [[lein-ring "0.9.6"]
             [lein-environ "1.0.0"]
