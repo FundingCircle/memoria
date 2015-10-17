@@ -12,6 +12,9 @@
 
 (selmer.parser/set-resource-path! (clojure.java.io/resource "public"))
 
+(def ^:private google-auth-client-id (System/getenv "MEMORIA_GOOGLE_AUTH_CLIENT_ID"))
+(def ^:private google-auth-api-key (System/getenv "MEMORIA_GOOGLE_AUTH_API_KEY"))
+
 (defn wrap-request-logging
   "Logs the data received in the request and the data generated in the response. Useful
   for debugging."
@@ -36,12 +39,22 @@
       (binding [db/*conn* datasource]
         (app request)))))
 
+(defn register-user-details
+  [body]
+  {:status 200
+   :body {}})
+
 (defroutes page-routes
-  (GET "/" req (selmer.parser/render-file "index.html" {:cards (cards/latest db/*conn*)})))
+  (GET "/" req (selmer.parser/render-file "index.html" {:google-auth-client-id google-auth-client-id
+                                                        :google-auth-api-key google-auth-api-key})))
+
+(defroutes user-auth-routes
+  (POST "/auth" {body :body :as req} (register-user-details body)))
 
 (defroutes app-routes
   (route/resources "/")
   page-routes
+  user-auth-routes
   cards-handler/cards-routes)
 
 (def app

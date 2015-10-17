@@ -8,6 +8,41 @@
     <title>Memoria</title>
   </head>
   <body>
+      <script type="text/javascript">
+       var clientId = '{{ google-auth-client-id }}';
+       var apiKey = '{{ google-auth-api-key }}';
+       var scopes = 'https://www.googleapis.com/auth/plus.me';
+
+       function handleClientLoad() {
+           gapi.client.setApiKey(apiKey);
+           window.setTimeout(checkAuth,1);
+       }
+
+       function checkAuth() {
+           gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+       }
+
+       function handleAuthResult(authResult) {
+           if (authResult && !authResult.error) {
+               makeApiCall();
+           }
+       }
+
+       function handleAuthClick(event) {
+           event.preventDefault();
+           gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+       }
+
+       function makeApiCall() {
+           gapi.client.load('plus', 'v1', function() {
+               var request = gapi.client.plus.people.get({'userId': 'me'});
+
+               request.execute(function(resp) {
+                   memoria.app.auth(resp);
+               });
+           });
+       }
+      </script>
     <div id="memoria-container"></div>
     <div id="modal" class="ui long fullscreen modal"></div>
     <div id="edit-modal" class="ui long fullscreen modal"></div>
@@ -15,8 +50,9 @@
     <script src="semantic-ui/semantic.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
     <script src="js/memoria.js"></script>
-    <script type="text/javascript">
-      memoria.app.init();
-      </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <script>
+     memoria.app.init();
+    </script>
     </body>
   </html>

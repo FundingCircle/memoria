@@ -53,6 +53,11 @@
   width: 100%;
 }
 
+.banner-title {
+  width: 80%;
+  float: left;
+}
+
 .banner h1 {
   font-family: 'Source Code Pro';
   font-size: 1.2rem;
@@ -111,4 +116,55 @@
 
 .ui input:focus, .ui textarea:focus {
   border-color: #952d72 !important;
+}
+
+/*-------------------
+User links 
+--------------------*/
+.user-links .user-name {
+  color: white;
+  font-size: 0.8em;
+  padding-right: 8px;
+}
+
+.user-links .user-photo img {
+  height: 25px;
+  width: 25px;
+}
+
+
+/*-------------------
+Google Sign In Button
+--------------------*/
+#auth-button {
+  display: inline-block;
+  background: #4285f4;
+  color: white;
+  width: 170px;
+  border-radius: 5px;
+  white-space: nowrap;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+#auth-button:hover {
+  cursor: pointer;
+}
+
+#auth-button span.icon {
+  background: url('/images/g-normal.png') transparent 50% no-repeat;
+  background-size: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 30px;
+  height: 20px;
+  border-right: #2265d4 1px solid;
+}
+
+#auth-button span.button-text {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 12px;
+  font-size: 10px;
+  font-weight: bold;
 }

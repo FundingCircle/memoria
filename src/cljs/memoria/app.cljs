@@ -10,17 +10,41 @@
 
 (def ^:private jquery (js* "$"))
 
+(def user-details (r/atom nil))
+
+(defn auth-button-component
+  "When this button is clicked, the Google+ authentication is initialised, causing
+  the Google popup to be displayed."
+  []
+   [:button {:id "auth-button" :class "ui button ":on-click js/handleAuthClick}
+    [:span.icon]
+    [:span.button-text "Sign in with Google"]])
+
+(defn user-links-component
+  []
+  [:div.user-links
+   [:span.user-name (:displayName @user-details)]
+   [:span.user-photo [:img {:src (get-in @user-details [:image :url])}]]])
+
 (defn banner-component []
   [:div {:class "banner" :key "banner"}
-   [:h1 "Memoria v0.1"]])
+   [:div.banner-title
+    [:h1 "Memoria v0.1"]]
+   (if @user-details
+     [user-links-component]
+     [auth-button-component])])
 
-(defn index-page-component []
+(defn index-page-component
+  "If the user is authenticated the list of the latest cards is displayed.
+  Otherwise, the auth button is displayed."
+  []
   [:div
    [banner-component]
-   [:div {:class "ui container main-content" :key "index-page-component"}
-    [search-box-component]
-    [cards-list-component]
-    [add-card-component]]])
+   (when @user-details
+     [:div {:class "ui container main-content" :key "index-page-component"}
+      [search-box-component]
+      [cards-list-component]
+      [add-card-component]])])
 
 (defn render-index-page []
   (r/render [index-page-component] (.getElementById js/document "memoria-container")))
@@ -28,8 +52,27 @@
 (defn render-edit-modal []
   (r/render [edit-card-modal-component cards] (.getElementById js/document "edit-modal")))
 
-(defn ^:export init []
-  (render-index-page)
-  (render-edit-modal)
-  (ajax/load-latest-cards #(reset! cards-atom %1)))
+(defn render-auth-button []
+  (r/render [auth-button-component] (.getElementById js/document "memoria-container")))
 
+(defn load-page []
+  (render-index-page)
+  (render-edit-modal))
+
+(defn ^:export auth
+  "Receives the response from calling the Google+ API with the user's details.
+
+  Having the user's details, the following actions are performed:
+
+  - Resets the user-details atom, which causes the latest cards to be displayed.
+  - Does an Ajax POST request to register the user.
+  - Loads the latest cards and resets the cards atom."
+  [user-details-response]
+  (let [details (js->clj user-details-response :keywordize-keys true)]
+    (reset! user-details details)
+    (ajax/do-post "/auth" (fn [response] (.log js/console response)) details)
+    (ajax/load-latest-cards #(reset! cards-atom %1))))
+
+(defn ^:export init
+  []
+  (load-page))
