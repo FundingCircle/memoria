@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [memoria.ajax :as ajax]
             [memoria.modal :as modal]
-            [memoria.cards-state :refer [cards-atom]]))
+            [memoria.state :refer [cards-atom]]))
 
 (def ^:private delete-state (r/atom :initial))
 

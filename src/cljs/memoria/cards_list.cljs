@@ -4,7 +4,7 @@
             [reagent.core :as r]
             [memoria.formatting :as formatting]
             [memoria.delete-card :as delete-card]
-            [memoria.cards-state :refer [cards-atom]]
+            [memoria.state :refer [cards-atom]]
             [memoria.modal :as modal]
             [memoria.edit-card :as edit-card]
             [memoria.ajax :as ajax]))

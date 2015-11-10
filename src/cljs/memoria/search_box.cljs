@@ -1,6 +1,6 @@
 (ns memoria.search-box
   (:require [reagent.core :as r]
-            [memoria.cards-state :refer [cards-atom]]
+            [memoria.state :refer [cards-atom]]
             [memoria.ajax :refer [do-get]]
             [memoria.data-binding :refer [bind-input]]))
 

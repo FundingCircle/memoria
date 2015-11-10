@@ -1,6 +1,6 @@
 (ns memoria.edit-card
   (:require [reagent.core :as r]
-            [memoria.cards-state :refer [cards-atom]]
+            [memoria.state :refer [cards-atom]]
             [memoria.data-binding :refer [bind-input]]
             [memoria.modal :as modal]
             [memoria.ajax :as ajax]))

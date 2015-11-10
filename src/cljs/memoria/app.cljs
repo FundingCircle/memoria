@@ -1,7 +1,7 @@
 (ns memoria.app
   (:require [reagent.core :as r]
             [ajax.core :as a]
-            [memoria.cards-state :refer [cards-atom]]
+            [memoria.state :refer [cards-atom user-details]]
             [memoria.ajax :as ajax]
             [memoria.cards-list :refer [card-component cards-list-component]]
             [memoria.search-box :refer [search-box-component]]
@@ -9,8 +9,6 @@
             [memoria.edit-card :refer [edit-card-modal-component]]))
 
 (def ^:private jquery (js* "$"))
-
-(def user-details (r/atom nil))
 
 (defn auth-button-component
   "When this button is clicked, the Google+ authentication is initialised, causing

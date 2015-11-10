@@ -3,7 +3,7 @@
             [reagent.core :as r]
             [dommy.core :refer-macros [sel sel1]]
             [memoria.cards-list :as cards-list]
-            [memoria.cards-state :as state]
+            [memoria.state :as state]
             [memoria.reagent-test-helper :refer [with-mounted-component click fire!]]))
 
 (deftest listing-cards-test
