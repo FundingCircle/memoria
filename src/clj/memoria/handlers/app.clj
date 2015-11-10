@@ -8,6 +8,7 @@
             [memoria.db :as db]
             [memoria.handlers.json-conversions]
             [memoria.handlers.cards :as cards-handler]
+            [memoria.handlers.auth :as auth-handler]
             [memoria.entities.cards :as cards]))
 
 (selmer.parser/set-resource-path! (clojure.java.io/resource "public"))
@@ -39,22 +40,14 @@
       (binding [db/*conn* datasource]
         (app request)))))
 
-(defn register-user-details
-  [body]
-  {:status 200
-   :body {}})
-
 (defroutes page-routes
   (GET "/" req (selmer.parser/render-file "index.html" {:google-auth-client-id google-auth-client-id
                                                         :google-auth-api-key google-auth-api-key})))
 
-(defroutes user-auth-routes
-  (POST "/auth" {body :body :as req} (register-user-details body)))
-
 (defroutes app-routes
   (route/resources "/")
   page-routes
-  user-auth-routes
+  auth-handler/user-auth-routes
   cards-handler/cards-routes)
 
 (def app

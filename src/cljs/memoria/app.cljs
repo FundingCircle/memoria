@@ -70,6 +70,7 @@
   [user-details-response]
   (let [details (js->clj user-details-response :keywordize-keys true)]
     (reset! user-details details)
+    (.log js/console (pr-str details))
     (ajax/do-post "/auth" (fn [response] (.log js/console response)) details)
     (ajax/load-latest-cards #(reset! cards-atom %1))))
 

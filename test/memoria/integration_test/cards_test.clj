@@ -68,7 +68,7 @@
       (let [attrs {:title nil :contents nil}
             response (do-post (str "/cards/" (:id card)) attrs)
             {:keys [status body headers]} response]
-        (is (= status) 422)
+        (is (= status 422))
         (is (nil? (get body "title")))
         (is (= (get-in body ["errors" "title"]) ["title must be present"]))))))
 
