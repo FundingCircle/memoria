@@ -17,7 +17,7 @@ SELECT id, title, tags, contents, ancestor_id, created_at FROM cards WHERE id = 
 
 -- name: insert-card<!
 -- Inserts a new record into the cards table
-INSERT INTO cards (title, tags, contents, created_at) VALUES (:title, :tags, :contents, :created_at);
+INSERT INTO cards (title, tags, contents, created_at, user_id) VALUES (:title, :tags, :contents, :created_at, :user_id);
 
 -- name: insert-card-with-ancestor<!
 -- Inserts a new record with an ancestor_id into the cards table

@@ -14,8 +14,8 @@
 
 (defn validate [card]
   (let [errors (first (b/validate card
-                                :title v/required
-                                :contents v/required))]
+                                  :title v/required
+                                  :contents v/required))]
     (if (some? errors)
       (assoc card :errors errors)
       card)))
@@ -50,8 +50,8 @@
 
 (defn insert
   "Inserts a new card record in the database"
-  [db {:keys [title contents tags]}]
-  (let [attrs (validate {:title title :contents contents :tags tags})]
+  [db {:keys [title contents tags user_id]}]
+  (let [attrs (validate {:title title :contents contents :tags tags :user_id user_id})]
     (if (valid? attrs)
       (run-insertion db insert-card<! attrs)
       attrs)))

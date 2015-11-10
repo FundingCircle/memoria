@@ -2,12 +2,17 @@
   (:require [clj-time.core :as t]
             [clj-time.coerce :as c]
             [memoria.entities.cards :as cards]
+            [memoria.entities.users :as users]
             [memoria.db :refer [*conn*]]
             [memoria.support.db-test-helpers :refer [setup-database-rollbacks]]
             [clojure.test :refer :all]))
 
 (setup-database-rollbacks :transaction)
 
+(def user-attributes {:google_id "12345"
+                      :display_name "John Doe"
+                      :email "john.doe@google.com"
+                      :photo_url "http://example.com/johndoe.jpg"})
 (def card-attributes {:title "A Card" :contents "These are the card's contents" :tags "tag1 tag2 tag3"})
 
 (deftest validations
@@ -62,6 +67,11 @@
       (cards/insert *conn* card-attributes)
       (is (= (cards/cnt *conn*)
              (+ 1 initial-count)))))
+
+  (testing "The inserted card is associated to the correct user"
+    (let [user (users/insert *conn* user-attributes)
+          card (cards/insert *conn* (assoc card-attributes :user_id (:id user)))]
+      (is (= (:user_id card) (:id user)))))
 
   (testing "The inserted card has the correct title"
     (let [card (cards/insert *conn* card-attributes)]

@@ -21,8 +21,8 @@
 (defn user-links-component
   []
   [:div.user-links
-   [:span.user-name (:displayName @user-details)]
-   [:span.user-photo [:img {:src (get-in @user-details [:image :url])}]]])
+   [:span.user-name (:display_name @user-details)]
+   [:span.user-photo [:img {:src (get @user-details :photo_url)}]]])
 
 (defn banner-component []
   [:div {:class "banner" :key "banner"}
@@ -48,7 +48,7 @@
   (r/render [index-page-component] (.getElementById js/document "memoria-container")))
 
 (defn render-edit-modal []
-  (r/render [edit-card-modal-component cards] (.getElementById js/document "edit-modal")))
+  (r/render [edit-card-modal-component] (.getElementById js/document "edit-modal")))
 
 (defn render-auth-button []
   (r/render [auth-button-component] (.getElementById js/document "memoria-container")))
@@ -66,10 +66,11 @@
   - Does an Ajax POST request to register the user.
   - Loads the latest cards and resets the cards atom."
   [user-details-response]
-  (let [details (js->clj user-details-response :keywordize-keys true)]
-    (reset! user-details details)
-    (.log js/console (pr-str details))
-    (ajax/do-post "/auth" (fn [response] (.log js/console response)) details)
+  (let [details (js->clj user-details-response :keywordize-keys true)
+        registered-user (ajax/do-post "/auth" (fn [response]
+                                                (.log js/console response)
+                                                (reset! user-details response)) details)]
+    ;; (reset! user-details (assoc details :id (:id registered-user)))
     (ajax/load-latest-cards #(reset! cards-atom %1))))
 
 (defn ^:export init

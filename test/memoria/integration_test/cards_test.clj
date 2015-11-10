@@ -3,6 +3,7 @@
             [memoria.support.integration-test-helpers :refer :all]
             [memoria.db :refer [*conn*]]
             [memoria.entities.cards :as cards]
+            [memoria.entities.users :as users]
             [clojure.test :refer :all]))
 
 (setup-database-rollbacks :truncation)
@@ -32,10 +33,16 @@
 
 (deftest creating-a-card-with-valid-attributes
   (testing "It succeeds"
-    (let [attrs {:title "This is a card" :contents "These are the card's contents"}
+    (let [user-attributes {:email "foo@bar.com"
+                           :display_name "John Doe"
+                           :google_id "123"
+                           :photo_url "http://goo.bar/ble.jpg"}
+          user (users/insert *conn* user-attributes)
+          attrs {:title "This is a card" :contents "These are the card's contents" :user_id (:id user)}
           response (do-post "/cards" attrs)
           {:keys [status body headers]} response]
       (is (= (get body "title") "This is a card"))
+      (is (= (get body "user_id") (:id user)))
       (is (some? (get body "id")))
       (is (= (:errors response) nil))
       (is (= status 201)))))
