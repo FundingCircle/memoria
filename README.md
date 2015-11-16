@@ -2,9 +2,30 @@
 
 ![and i swear that i...](http://i.imgur.com/yUUFcNq.jpg)
 
+## Synopsis
+
+**What is memoria?**
+
+This project is about making ideas, discoveries or even notes available to anybody
+that wants to in a searchable and easy way.
+
+**What kind of ideas, discoveries or notes do I mean?**
+
+Anything really. If you have something that you just fixed and discovered you can post
+a card into the system that stores it in a centralised place where it can be searched
+later by anyone.
+
+**What is this useful for?**
+
+All this is about knowledge sharing. All notes are in one centralised place,
+and can be reused by anybody else.
+
+We think is a common problem and anybody can make use of it. Please collaborate
+and help us with more ideas to make it better.
+
 ## Dependencies
 
-- PostgreSQL
+- PostgreSQL >= 9.4.x
 - JDK 1.8
 - NodeJS (if you need to change/update SemanticUI)
 - Gulp (if you need to change/update SemanticUI)
