@@ -2,22 +2,15 @@
   (:require [clj-time.jdbc]
             [clj-time.core :as t]
             [yesql.core :refer [defqueries]]
-            [bouncer.core :as b]
-            [bouncer.validators :as v]))
+            [bouncer.validators :as v]
+            [memoria.entities.validations :refer [validate-entity valid?]]))
 
 (defqueries "sql/users.sql")
 
 (defn validate [user]
-  (let [errors (first (b/validate user
-                                  :google_id v/required
-                                  :display_name v/required
-                                  :email [v/required v/email]))]
-    (if (some? errors)
-      (assoc user :errors errors)
-      user)))
-
-(defn valid? [user]
-  (nil? (:errors user)))
+  (validate-entity user [:google_id v/required
+                         :display_name v/required
+                         :email [v/required v/email]]))
 
 (defn cnt
   "Returns the total number of users in the database"

@@ -3,8 +3,8 @@
             [clj-time.core :as t]
             [clj-time.jdbc]
             [yesql.core :refer [defqueries]]
-            [bouncer.core :as b]
-            [bouncer.validators :as v]))
+            [bouncer.validators :as v]
+            [memoria.entities.validations :refer [validate-entity valid?]]))
 
 (defqueries "sql/cards.sql")
 
@@ -13,15 +13,8 @@
       (dissoc :tsv)))
 
 (defn validate [card]
-  (let [errors (first (b/validate card
-                                  :title v/required
-                                  :contents v/required))]
-    (if (some? errors)
-      (assoc card :errors errors)
-      card)))
-
-(defn valid? [card]
-  (nil? (:errors card)))
+  (validate-entity card [:title v/required
+                         :contents v/required]))
 
 (defn cnt
   "Returns the total number of card records in
