@@ -4,24 +4,19 @@
 
 ## Synopsis
 
-**What is memoria?**
+Memoria is a web application which provides a central location to store, search and share knowledge cards.
 
-This project is about making ideas, discoveries or even notes available to anybody
-that wants to in a searchable and easy way.
+### Functionalities
 
-**What kind of ideas, discoveries or notes do I mean?**
+* Supports markdown
+* Search with PostgreSQL
+* Google Authentication
 
-Anything really. If you have something that you just fixed and discovered you can post
-a card into the system that stores it in a centralised place where it can be searched
-later by anyone.
+### Roadmap
 
-**What is this useful for?**
-
-All this is about knowledge sharing. All notes are in one centralised place,
-and can be reused by anybody else.
-
-We think is a common problem and anybody can make use of it. Please collaborate
-and help us with more ideas to make it better.
+* Browse edit history
+* Shareable links to card
+* Email domain authorization
 
 ## Dependencies
 
