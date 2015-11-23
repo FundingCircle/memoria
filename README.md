@@ -2,9 +2,25 @@
 
 ![and i swear that i...](http://i.imgur.com/yUUFcNq.jpg)
 
+## Synopsis
+
+Memoria is a web application which provides a central location to store, search and share knowledge cards.
+
+### Functionalities
+
+* Supports markdown
+* Search with PostgreSQL
+* Google Authentication
+
+### Roadmap
+
+* Browse edit history
+* Shareable links to card
+* Email domain authorization
+
 ## Dependencies
 
-- PostgreSQL
+- PostgreSQL >= 9.4.x
 - JDK 1.8
 - NodeJS (if you need to change/update SemanticUI)
 - Gulp (if you need to change/update SemanticUI)
