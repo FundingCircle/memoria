@@ -59,6 +59,17 @@ Files and tests will be reloaded every time a change is saved.
 
 CSS files will also be automatically reloaded.
 
+## User Authentication
+
+Memoria provides user authentication through the Google authentication API. There is not much control about who can access the cards, as long as they have a valid Google account. This provides us enough information to track who created or edited a card, but may be a problem if you need more strict security. If that's the case, consider running the application in a different network, thus limiting access.
+
+For the user authentication to work properly, the following environment variables are required:
+
+| Name                          | Description                       | Default value |
+|-------------------------------+-----------------------------------+---------------|
+| MEMORIA_GOOGLE_AUTH_CLIENT_ID | Client ID for the Google Auth API |               |
+| MEMORIA_GOOGLE_AUTH_API_KEY   | API Key for the Google Auth API   |               |
+
 ## Testing
 
 In REPL (example)

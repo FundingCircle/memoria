@@ -4,7 +4,7 @@
             [reagent.core :as r]
             [memoria.formatting :as formatting]
             [memoria.delete-card :as delete-card]
-            [memoria.cards-state :refer [cards-atom]]
+            [memoria.state :refer [cards-atom]]
             [memoria.modal :as modal]
             [memoria.edit-card :as edit-card]
             [memoria.ajax :as ajax]))
@@ -14,11 +14,19 @@
 (defn open-edit-modal [card]
   (edit-card/show-edit-modal card))
 
+(defn- card-created-at [card]
+  (-> card
+      :created_at
+      formatting/format-datetime-string))
+
 (defn created-at-component [card]
-  (when (some? (:created_at card))
-    [:span {:class "created-at"} (-> card
-                                     :created_at
-                                     formatting/format-datetime-string)]))
+  [:span {:class "created-at"} (card-created-at card)])
+
+(defn author-component [card]
+  [:span {:class "created-at"} (str "Last edited by "
+                                    (:user_name card)
+                                    " at "
+                                    (card-created-at card))])
 
 (defn card-modal-component [card]
   (delete-card/reset-state)
@@ -26,7 +34,7 @@
    [:div {:class "ui header"}
     [:h1 {:class "title"} (:title card)]
     [:span {:class "tags"} (:tags card)]]
-   [created-at-component card]
+   [author-component card]
    [:div {:class "ui divider"}]
    [:div#markdown-content {:class "card-contents"}]
    [delete-card/delete-button-component card]

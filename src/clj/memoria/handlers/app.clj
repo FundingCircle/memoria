@@ -8,9 +8,13 @@
             [memoria.db :as db]
             [memoria.handlers.json-conversions]
             [memoria.handlers.cards :as cards-handler]
+            [memoria.handlers.auth :as auth-handler]
             [memoria.entities.cards :as cards]))
 
 (selmer.parser/set-resource-path! (clojure.java.io/resource "public"))
+
+(def ^:private google-auth-client-id (System/getenv "MEMORIA_GOOGLE_AUTH_CLIENT_ID"))
+(def ^:private google-auth-api-key (System/getenv "MEMORIA_GOOGLE_AUTH_API_KEY"))
 
 (defn wrap-request-logging
   "Logs the data received in the request and the data generated in the response. Useful
@@ -37,11 +41,13 @@
         (app request)))))
 
 (defroutes page-routes
-  (GET "/" req (selmer.parser/render-file "index.html" {:cards (cards/latest db/*conn*)})))
+  (GET "/" req (selmer.parser/render-file "index.html" {:google-auth-client-id google-auth-client-id
+                                                        :google-auth-api-key google-auth-api-key})))
 
 (defroutes app-routes
   (route/resources "/")
   page-routes
+  auth-handler/user-auth-routes
   cards-handler/cards-routes)
 
 (def app

@@ -3,10 +3,16 @@
             [memoria.support.integration-test-helpers :refer :all]
             [memoria.db :refer [*conn*]]
             [memoria.entities.cards :as cards]
+            [memoria.entities.users :as users]
             [clojure.test :refer :all]))
 
 (setup-database-rollbacks :truncation)
 (setup-server-fixture)
+
+(def user-attributes {:email "foo@bar.com"
+                      :display_name "John Doe"
+                      :google_id "123"
+                      :photo_url "http://goo.bar/ble.jpg"})
 
 (deftest listing-latest-cards
   (let [cards (cards/insert *conn* {:title "First Card" :contents "First contents"})
@@ -21,7 +27,8 @@
         (is (= (get (second body) "title") "First Card"))))))
 
 (deftest getting-a-card-by-id
-  (let [card (cards/insert *conn* {:title "A Card" :contents "These are the contents"})]
+  (let [user (users/insert *conn* user-attributes)
+        card (cards/insert *conn* {:title "A Card" :contents "These are the contents" :user_id (:id user)})]
     (testing "It succeeds"
       (let [response (do-get (str "/cards/" (:id card)))
             {:keys [status body headers]} response]
@@ -32,10 +39,12 @@
 
 (deftest creating-a-card-with-valid-attributes
   (testing "It succeeds"
-    (let [attrs {:title "This is a card" :contents "These are the card's contents"}
+    (let [user (users/insert *conn* user-attributes)
+          attrs {:title "This is a card" :contents "These are the card's contents" :user_id (:id user)}
           response (do-post "/cards" attrs)
           {:keys [status body headers]} response]
       (is (= (get body "title") "This is a card"))
+      (is (= (get body "user_id") (:id user)))
       (is (some? (get body "id")))
       (is (= (:errors response) nil))
       (is (= status 201)))))
@@ -51,13 +60,15 @@
       (is (= status 422)))))
 
 (deftest updating-a-card-with-valid-attributes
-  (let [card (cards/insert *conn* {:title "This is a card" :contents "These are the contents"})]
+  (let [user (users/insert *conn* user-attributes)
+        card (cards/insert *conn* {:title "This is a card" :contents "These are the contents" :user_id (:id user)})]
     (testing "It succeeds"
-      (let [attrs {:title "This is the new title" :contents "New contents"}
+      (let [attrs {:title "This is the new title" :contents "New contents" :user_id (:id user)}
             response (do-post (str "/cards/" (:id card)) attrs)
             {:keys [status body headers]} response
             updated-card (cards/find-by-id *conn* (get body "id"))]
         (is (= status 200))
+        (is (= (:id user) (:user_id updated-card)))
         (is (= (:title updated-card) "This is the new title"))
         (is (= (:contents updated-card) "New contents"))
         (is (= (get headers "content-type") "application/json; charset=utf-8"))))))
@@ -68,7 +79,7 @@
       (let [attrs {:title nil :contents nil}
             response (do-post (str "/cards/" (:id card)) attrs)
             {:keys [status body headers]} response]
-        (is (= status) 422)
+        (is (= status 422))
         (is (nil? (get body "title")))
         (is (= (get-in body ["errors" "title"]) ["title must be present"]))))))
 

@@ -1,6 +1,6 @@
 (ns memoria.edit-card
   (:require [reagent.core :as r]
-            [memoria.cards-state :refer [cards-atom]]
+            [memoria.state :refer [cards-atom user-details]]
             [memoria.data-binding :refer [bind-input]]
             [memoria.modal :as modal]
             [memoria.ajax :as ajax]))
@@ -21,7 +21,8 @@
   (.preventDefault event)
   (let [params {:title @title-atom
                 :contents @contents-atom
-                :tags @tags-atom}]
+                :tags @tags-atom
+                :user_id (:id @user-details)}]
     (ajax/do-post (str "/cards/" (:id @card-atom))
              (fn [resp]
                (ajax/load-latest-cards #(reset! cards-atom %1))

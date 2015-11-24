@@ -1,6 +1,6 @@
 (ns memoria.add-card
   (:require [reagent.core :as r]
-            [memoria.cards-state :refer [cards-atom]]
+            [memoria.state :refer [cards-atom user-details]]
             [memoria.ajax :as ajax]
             [memoria.modal :as modal]
             [memoria.data-binding :refer [bind-input]]))
@@ -20,13 +20,17 @@
   (.preventDefault event)
   (let [params {:title @title-atom
                 :contents @contents-atom
-                :tags @tags-atom}]
+                :tags @tags-atom
+                :user_id (:id @user-details)}]
+    (.log js/console "THIS IS THE USER")
+    (.log js/console @user-details)
     (ajax/do-post "/cards"
              (fn [resp]
                (ajax/load-latest-cards #(reset! cards-atom %1))
                (reset-inputs)
                (modal/close-modal))
              params)))
+
 
 (defn add-card-modal []
   [:div {:key "add-card-modal" :class "container memoria-modal"}
@@ -35,7 +39,7 @@
 
    [:form {:class "ui small form"
            :action "#"
-           :on-submit #(on-form-submit %1 cards-atom)}
+           :on-submit #(on-form-submit %1)}
     [:div {:class "required field"}
      [:label "Title"]
      [:input {:value @title-atom :type "text" :on-change (bind-input title-atom)}]]
