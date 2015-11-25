@@ -6,6 +6,10 @@
             [memoria.state :as state]
             [memoria.reagent-test-helper :refer [with-mounted-component click fire!]]))
 
+(deftest url-hash-test
+  (testing "builds the hash using the card's id and title"
+    (is (= "card-123-this-is-the-title" (cards-list/url-hash {:id 123 :title "ThiS iS tHe tiTle"})))))
+
 (deftest listing-cards-test
   (reset! state/cards-atom [{:id 1
                              :title "A card"
