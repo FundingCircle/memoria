@@ -15,7 +15,6 @@ Memoria is a web application which provides a central location to store, search 
 ### Roadmap
 
 * Browse edit history
-* Shareable links to card
 * Email domain authorization
 
 ## Dependencies
