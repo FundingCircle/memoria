@@ -3,7 +3,7 @@
             [ajax.core :as a]
             [memoria.state :refer [cards-atom user-details]]
             [memoria.ajax :as ajax]
-            [memoria.cards-list :refer [card-component cards-list-component]]
+            [memoria.cards-list :refer [card-component cards-list-component open-card-modal]]
             [memoria.search-box :refer [search-box-component]]
             [memoria.add-card :refer [add-card-component]]
             [memoria.edit-card :refer [edit-card-modal-component]]))
@@ -39,6 +39,7 @@
   [:div
    [banner-component]
    (when @user-details
+     (open-card-from-url)
      [:div {:class "ui container main-content" :key "index-page-component"}
       [search-box-component]
       [cards-list-component]
@@ -50,8 +51,11 @@
 (defn render-edit-modal []
   (r/render [edit-card-modal-component] (.getElementById js/document "edit-modal")))
 
-(defn render-auth-button []
-  (r/render [auth-button-component] (.getElementById js/document "memoria-container")))
+(defn open-card-from-url []
+  (let [url-hash (.-hash js/window.location)
+        card-id (last (re-find #"card-(\d+)-.+" url-hash))]
+    (when (and card-id @user-details)
+      (open-card-modal card-id))))
 
 (defn load-page []
   (render-index-page)
@@ -70,7 +74,6 @@
         registered-user (ajax/do-post "/auth" (fn [response]
                                                 (.log js/console response)
                                                 (reset! user-details response)) details)]
-    ;; (reset! user-details (assoc details :id (:id registered-user)))
     (ajax/load-latest-cards #(reset! cards-atom %1))))
 
 (defn ^:export init

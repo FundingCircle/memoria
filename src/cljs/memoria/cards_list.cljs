@@ -7,7 +7,8 @@
             [memoria.state :refer [cards-atom]]
             [memoria.modal :as modal]
             [memoria.edit-card :as edit-card]
-            [memoria.ajax :as ajax]))
+            [memoria.ajax :as ajax]
+            [clojure.string :as str]))
 
 (def ^:private jquery (js* "$"))
 
@@ -18,6 +19,13 @@
   (-> card
       :created_at
       formatting/format-datetime-string))
+
+(defn url-hash [card]
+  (let [title (-> card
+                  :title
+                  str/lower-case
+                  (str/replace #" " "-"))]
+    (str "card-" (:id card) "-" title)))
 
 (defn created-at-component [card]
   [:span {:class "created-at"} (card-created-at card)])
@@ -39,24 +47,28 @@
    [:div#markdown-content {:class "card-contents"}]
    [delete-card/delete-button-component card]
    [:button {:class "circular ui icon button edit-card" :title "Edit card" :on-click #(open-edit-modal card)}
-     [:i {:class "icon write"}]]])
+    [:i {:class "icon write"}]]])
 
 (defn markdown-component [contents]
   (fn [contents]
     [:div {:dangerouslySetInnerHTML
            {:__html (-> contents str js/marked)}}]))
 
+(defn open-card-modal
+  [card-id]
+  (let [url (str "/cards/" card-id)]
+    (ajax/do-get url (fn [response]
+                       (r/render [card-modal-component response] (.getElementById js/document "modal"))
+                       (r/render [markdown-component (:contents card)] (.getElementById js/document "markdown-content"))
+                       (-> (jquery "#modal")
+                           (.modal "show"))))))
+
 (defn card-component [card]
   (let [stripped-contents (formatting/strip-images (:contents card))
         on-title-clicked (fn [event]
-                           (let [card-id (-> event .-target jquery (.data "id"))
-                                 url (str "/cards/" card-id)]
-                             (ajax/do-get url (fn [response]
-                                           (r/render [card-modal-component response] (.getElementById js/document "modal"))
-                                           (r/render [markdown-component (:contents card)] (.getElementById js/document "markdown-content"))
-                                           (-> (jquery "#modal")
-                                               (.modal "show"))))))]
-
+                           (.preventDefault event)
+                           (set! (.-hash js/window.location) (url-hash card))
+                           (open-card-modal (:id card)))]
     [:div {:class "eight wide column memoria-cards" :key (:id card)}
      [:div {:class "memoria-card ui container raised padded segment purple" :id (str "card-thumbnail-" (:id card))}
       [:div {:class "ui header"}
