@@ -39,6 +39,7 @@
   [:div
    [banner-component]
    (when @user-details
+     (open-card-from-url)
      [:div {:class "ui container main-content" :key "index-page-component"}
       [search-box-component]
       [cards-list-component]
@@ -51,14 +52,14 @@
   (r/render [edit-card-modal-component] (.getElementById js/document "edit-modal")))
 
 (defn open-card-from-url []
-  (let [url-hash (.-hash js/window.location)]
-    (when-let [card-id (last (re-find #"card-(\d+)-.+" url-hash))]
+  (let [url-hash (.-hash js/window.location)
+        card-id (last (re-find #"card-(\d+)-.+" url-hash))]
+    (when (and card-id @user-details)
       (open-card-modal card-id))))
 
 (defn load-page []
   (render-index-page)
-  (render-edit-modal)
-  (open-card-from-url))
+  (render-edit-modal))
 
 (defn ^:export auth
   "Receives the response from calling the Google+ API with the user's details.
