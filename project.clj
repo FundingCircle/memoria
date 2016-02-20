@@ -44,7 +44,15 @@
                                   [com.cemerick/austin "0.1.6"]
                                   [org.clojure/tools.nrepl "0.2.10"]]}}
 
-  :cljsbuild {:builds [{:id "dev"
+  :cljsbuild {:builds [{:id "production"
+                        :source-paths ["src/cljs/"]
+                        :compiler {:output-to "resources/public/js/memoria.js"
+                                   :output-dir "resources/public/js/out"
+                                   :main "memoria.app"
+                                   :asset-path "js/out"
+                                   :optimizations :whitespace
+                                   :pretty-print true}}
+                       {:id "dev"
                         :source-paths ["src/cljs/" "test"]
                         :figwheel {:on-jsload "memoria.test/run"}
                         :compiler {:output-to "resources/public/js/memoria.js"
