@@ -65,7 +65,7 @@ Memoria provides user authentication through the Google authentication API. Ther
 For the user authentication to work properly, the following environment variables are required:
 
 | Name                          | Description                       | Default value |
-|-------------------------------+-----------------------------------+---------------|
+|-----------------------------------------------------------------------------------|
 | MEMORIA_GOOGLE_AUTH_CLIENT_ID | Client ID for the Google Auth API |               |
 | MEMORIA_GOOGLE_AUTH_API_KEY   | API Key for the Google Auth API   |               |
 
