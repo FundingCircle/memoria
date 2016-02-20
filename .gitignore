@@ -15,4 +15,3 @@ pom.xml.asc
 .hg/
 .DS_Store
 figwheel_server.log
-resources/public/js/memoria.js
